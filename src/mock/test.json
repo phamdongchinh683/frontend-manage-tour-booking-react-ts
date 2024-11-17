@@ -1,98 +1,50 @@
-{
- "user": [
-  {
-   "id": "1",
-   "name": "user List",
-   "linkRouter": "manage-user/user"
-  },
-  {
-   "id": "2",
-   "name": "Create Users",
-   "linkRouter": "manage-user/create-user"
-  }
- ],
- "role": [
-  {
-   "id": "1",
-   "name": "user",
-   "linkRouter": "/manage-role/role"
-  },
-  {
-   "id": "2",
-   "name": "Create role",
-   "linkRouter": "/manage-role/create-role"
-  }
- ],
- "booking": [
-  {
-   "id": "1",
-   "name": "Booking List",
-   "linkRouter": "/manage-booking-tour/booking-tour-list"
-  },
-  {
-   "id": "2",
-   "name": "Create Booking Tour",
-   "linkRouter": "/manage-booking-tour/create-tour"
-  }
- ],
- "blog": [
-  {
-   "id": "1",
-   "name": "Blog List",
-   "linkRouter": "/manage-blog/blog-list"
-  },
-  {
-   "id": "2",
-   "name": "Create Blog",
-   "linkRouter": "/manage-blog/create-blog"
-  }
- ],
- "comment": [
-  {
-   "id": "1",
-   "name": "Comment List",
-   "linkRouter": "/manage-comment/comment-list"
-  },
-  {
-   "id": "2",
-   "name": "Create Comment",
-   "linkRouter": "/manage-comment/create-comment"
-  }
- ],
- "review": [
-  {
-   "id": "1",
-   "name": "Review List",
-   "linkRouter": "/manage-review/review-list"
-  },
-  {
-   "id": "2",
-   "name": "Create Comment",
-   "linkRouter": "/manage-review/create-review"
-  }
- ],
- "tour": [
-  {
-   "id": "1",
-   "name": "Tour List",
-   "linkRouter": "/manage-tour/tour-list"
-  },
-  {
-   "id": "2",
-   "name": "Create Tour",
-   "linkRouter": "/manage-tour/create-tour"
-  }
- ],
- "payment": [
-  {
-   "id": "1",
-   "name": "Payment List",
-   "linkRouter": "/manage-payment/payment-list"
-  },
-  {
-   "id": "2",
-   "name": "Create Payment",
-   "linkRouter": "/manage-payment/create-payment"
-  }
- ]
-}
+[
+ {
+  "category": "user",
+  "id": "1",
+  "name": "User List",
+  "linkRouter": "manage-user/user"
+ },
+ {
+  "category": "role",
+  "id": "2",
+  "name": "Role List",
+  "linkRouter": "manage-role/role"
+ },
+ {
+  "category": "bookingTour",
+  "id": "3",
+  "name": "Booking List",
+  "linkRouter": "manage-booking-tour/booking-tour-list"
+ },
+ {
+  "category": "blog",
+  "id": "4",
+  "name": "Blog List",
+  "linkRouter": "manage-blog/blog-list"
+ },
+ {
+  "category": "comment",
+  "id": "5",
+  "name": "Comment List",
+  "linkRouter": "manage-comment/comment-list"
+ },
+ {
+  "category": "review",
+  "id": "6",
+  "name": "Review List",
+  "linkRouter": "manage-review/review-list"
+ },
+ {
+  "category": "tour",
+  "id": "7",
+  "name": "Tour List",
+  "linkRouter": "manage-tour/tour-list"
+ },
+ {
+  "category": "payment",
+  "id": "8",
+  "name": "Payment List",
+  "linkRouter": "manage-payment/payment-list"
+ }
+]

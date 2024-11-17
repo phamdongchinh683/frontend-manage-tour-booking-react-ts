@@ -1,4 +1,4 @@
-export interface UsersResponse {
+export interface UserDetail {
  _id: string;
  username: string;
  fullName: {
@@ -11,4 +11,6 @@ export interface UsersResponse {
    email: string;
    phone: string;
  };
+ role_id: string;
+ createAt: string;
 }

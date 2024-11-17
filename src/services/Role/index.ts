@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { UserCreation } from "../../models/UserCreation";
+// import { UserCreation } from "../../models/UserCreation";
 
 export function RoleService() {
 
@@ -23,7 +23,7 @@ export function RoleService() {
   }
   }
 
-  const addRole = async (data: UserCreation[]): Promise<string> => {
+  const addRole = async (data: any): Promise<string> => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {

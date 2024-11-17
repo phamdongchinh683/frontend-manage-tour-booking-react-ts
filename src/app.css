@@ -7,11 +7,27 @@ body {
 .container-body {
  display: flex;
  flex-direction: column;
+ justify-content: center;
  min-height: 100vh;
 }
 
 main {
- margin-top: 6rem;
+ margin-top: 1rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+ -webkit-appearance: none;
+ margin: 0;
+}
+
+
+
+.table td.text-truncate-column {
+ max-width: 150px; 
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
 }
 
 

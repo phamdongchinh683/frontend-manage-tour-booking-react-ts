@@ -7,9 +7,11 @@ import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import { UserCreationForm } from "../pages/User/Components/UserCreationForm";
 import { UserList } from "../pages/User/Components/UserList";
+import { UserUpdateForm } from "../pages/User/Components/UserUpdateForm";
+import { UserDetailById } from "../pages/User/Components/UserDetail";
 
 export const RouterApp: React.FC = () => {
-  const { isAuthenticated } = useToken(); // Use token hook
+  const { isAuthenticated } = useToken();
 
   const router = createBrowserRouter([
     {
@@ -38,6 +40,14 @@ export const RouterApp: React.FC = () => {
             {
               path: "manage-user/create-user",
               element: <UserCreationForm />,
+            },
+            {
+              path: "manage-user/edit-user/:id",
+              element: <UserUpdateForm/>
+            },
+            {
+              path: "manage-user/detail-user/:id",
+              element: <UserDetailById/>
             },
             {
               path: "*",
