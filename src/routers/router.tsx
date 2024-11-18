@@ -1,14 +1,21 @@
 import React from "react";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
-import { Layout } from '../components/Layout';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import { Layout } from "../components/Layout";
 import useToken from "../jwt/useToken";
 import { Login } from "../pages/Auth/Login";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
+import { TourDetailById } from "../pages/Tour/Components/TourDetail";
+import { TourList } from "../pages/Tour/Components/TourList";
 import { UserCreationForm } from "../pages/User/Components/UserCreationForm";
+import { UserDetailById } from "../pages/User/Components/UserDetail";
 import { UserList } from "../pages/User/Components/UserList";
 import { UserUpdateForm } from "../pages/User/Components/UserUpdateForm";
-import { UserDetailById } from "../pages/User/Components/UserDetail";
+import { TourUpdateForm } from "../pages/Tour/Components/TourUpdateForm";
 
 export const RouterApp: React.FC = () => {
   const { isAuthenticated } = useToken();
@@ -16,16 +23,28 @@ export const RouterApp: React.FC = () => {
   const router = createBrowserRouter([
     {
       path: "/login",
-      element: isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Login />,
+      element: isAuthenticated() ? (
+        <Navigate to="/dashboard" replace />
+      ) : (
+        <Login />
+      ),
       index: true,
     },
     {
       path: "/",
-      element: isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />,
+      element: isAuthenticated() ? (
+        <Navigate to="/dashboard" replace />
+      ) : (
+        <Navigate to="/login" replace />
+      ),
     },
     {
       path: "/dashboard",
-      element: isAuthenticated() ? <Layout /> : <Navigate to="/login" replace />,
+      element: isAuthenticated() ? (
+        <Layout />
+      ) : (
+        <Navigate to="/login" replace />
+      ),
       children: [
         {
           children: [
@@ -43,15 +62,27 @@ export const RouterApp: React.FC = () => {
             },
             {
               path: "manage-user/edit-user/:id",
-              element: <UserUpdateForm/>
+              element: <UserUpdateForm />,
             },
             {
               path: "manage-user/detail-user/:id",
-              element: <UserDetailById/>
+              element: <UserDetailById />,
+            },
+            {
+              path: "manage-tour/tour",
+              element: <TourList />,
+            },
+            {
+              path: "manage-tour/detail-tour/:id",
+              element: <TourDetailById />,
+            },
+            {
+              path: "manage-tour/edit-tour/:id",
+              element: <TourUpdateForm />,
             },
             {
               path: "*",
-              element: <p>403 Forbidden Error</p>,
+              element: <NotFound />,
             },
           ],
         },

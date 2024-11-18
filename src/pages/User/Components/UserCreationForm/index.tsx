@@ -1,11 +1,21 @@
-import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
-import { Alert, Button, Card, Col, Container, Form, Row, Spinner, Table } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { ProvinceResponse } from '../../../../models/ProvinceResponse';
-import { RoleResponse } from '../../../../models/RoleResponse';
-import { UserCreation } from '../../../../models/UserCreation';
-import { RoleService } from '../../../../services/Role';
-import { UserService } from '../../../../services/User';
+import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Row,
+  Spinner,
+  Table,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { ProvinceResponse } from "../../../../models/ProvinceResponse";
+import { RoleResponse } from "../../../../models/RoleResponse";
+import { UserCreation } from "../../../../models/UserCreation";
+import { RoleService } from "../../../../services/Role";
+import { UserService } from "../../../../services/User";
 
 export const UserCreationForm: FC = () => {
   const navigate = useNavigate();
@@ -17,15 +27,15 @@ export const UserCreationForm: FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [userList, setUserList] = useState<UserCreation[]>([]);
   const [data, setData] = useState<UserCreation>({
-    username: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    age: '',
-    city: '',
-    email: '',
-    phone: '',
-    role_id: '',
+    username: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    age: "",
+    city: "",
+    email: "",
+    phone: "",
+    role_id: "",
   });
 
   useEffect(() => {
@@ -38,8 +48,7 @@ export const UserCreationForm: FC = () => {
         setRoles(rolesData);
         setProvinces(provincesData);
       } catch (err) {
-        console.error(err);
-        setError('Failed to load roles or provinces.');
+        setError("Failed to load roles or provinces.");
       } finally {
         setLoading(false);
       }
@@ -47,7 +56,7 @@ export const UserCreationForm: FC = () => {
 
     fetchData();
 
-    const savedUsers = localStorage.getItem('users');
+    const savedUsers = localStorage.getItem("users");
     const users = savedUsers ? JSON.parse(savedUsers) : [];
     setUserList(users);
   }, []);
@@ -61,84 +70,112 @@ export const UserCreationForm: FC = () => {
   };
 
   const deleteUser = (index: number) => {
-    const savedUsers = localStorage.getItem('users');
+    const savedUsers = localStorage.getItem("users");
     const users = savedUsers ? JSON.parse(savedUsers) : [];
-    
-    users.splice(index, 1); 
-    localStorage.setItem('users', JSON.stringify(users)); 
-    
+
+    users.splice(index, 1);
+    localStorage.setItem("users", JSON.stringify(users));
+
     setUserList(users);
   };
 
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const { username, password, firstName, lastName, age, city, email, phone, role_id } = data;
-    if (!username || !password || !firstName || !lastName || !age || !city || !email || !phone || !role_id) {
-      setError('Please fill in all fields.');
+    const {
+      username,
+      password,
+      firstName,
+      lastName,
+      age,
+      city,
+      email,
+      phone,
+      role_id,
+    } = data;
+    if (
+      !username ||
+      !password ||
+      !firstName ||
+      !lastName ||
+      !age ||
+      !city ||
+      !email ||
+      !phone ||
+      !role_id
+    ) {
+      setError("Please fill in all fields.");
       return;
     }
     setError(null);
-    const savedUsers = localStorage.getItem('users');
+    const savedUsers = localStorage.getItem("users");
     const users = savedUsers ? JSON.parse(savedUsers) : [];
     users.push(data);
-    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem("users", JSON.stringify(users));
     setUserList(users);
 
     try {
-      alert('User created successfully!');
+      alert("User created successfully!");
       setData({
-        username: '',
-        password: '',
-        firstName: '',
-        lastName: '',
-        age: '',
-        city: '',
-        email: '',
-        phone: '',
-        role_id: '',
+        username: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+        age: "",
+        city: "",
+        email: "",
+        phone: "",
+        role_id: "",
       });
     } catch (err) {
       console.error(err);
-      setError('Failed to create user. Please try again.');
+      setError("Failed to create user. Please try again.");
     }
   };
 
   const saveUsers = async () => {
-    const savedUsers = localStorage.getItem('users');
+    const savedUsers = localStorage.getItem("users");
     const users = savedUsers ? JSON.parse(savedUsers) : [];
     const result: any = await AddUsers({ users: users });
 
-    if (result === 'Exited') {
-      alert('Some users already exist in the system. Please review the data.');
+    if (result === "Exited") {
+      alert("Some users already exist in the system. Please review the data.");
     } else if (users.length === 0) {
-      alert('No users have been created. Please add users before saving.');
+      alert("No users have been created. Please add users before saving.");
     } else {
-      alert('Users have been successfully saved to the database.');
-      localStorage.removeItem('users');
-      navigate('/dashboard/manage-user/user');
+      alert("Users have been successfully saved to the database.");
+      localStorage.removeItem("users");
+      navigate("/dashboard/manage-user/user");
     }
   };
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
         <Spinner animation="border" variant="primary" />
       </div>
     );
   }
   return (
     <Container>
-      <div className='users-header d-flex justify-content-between align-items-center'>
-          <h1>Create Users</h1> 
+      <div className="users-header d-flex justify-content-between align-items-center">
+        <h1>Create Users</h1>
       </div>
       <Row className="mt-2">
         <Col md={6}>
           <Card>
-            <Card.Header className="bg-primary text-white">Create New User</Card.Header>
+            <Card.Header className="bg-primary text-white">
+              Create New User
+            </Card.Header>
             <Card.Body>
               {error && (
-                <Alert variant="danger" onClose={() => setError(null)} dismissible>
+                <Alert
+                  variant="danger"
+                  onClose={() => setError(null)}
+                  dismissible
+                >
                   {error}
                 </Alert>
               )}
@@ -185,7 +222,10 @@ export const UserCreationForm: FC = () => {
                     >
                       <option value="">Select city...</option>
                       {provinces.map((province) => (
-                        <option key={province.province_id} value={province.province_name}>
+                        <option
+                          key={province.province_id}
+                          value={province.province_name}
+                        >
                           {province.province_name}
                         </option>
                       ))}
@@ -260,54 +300,61 @@ export const UserCreationForm: FC = () => {
             </Card.Body>
           </Card>
         </Col>
-
         <Col md={6}>
           <Card>
-            <Card.Header className="bg-secondary text-white">Created Users</Card.Header>
+            <Card.Header className="bg-secondary text-white">
+              Created Users
+            </Card.Header>
             <Card.Body>
-              <Table responsive="sm">
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>PhoneNumber</th>
-                    <th>Email</th>
-                    <th>Handler</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {userList.map((user, index) => (
-                    <tr key={index}>
-                      <td className="text-truncate-column">{user.username}</td>
-                      <td className="text-truncate-column">{user.password}</td>
-                      <td className="text-truncate-column">{user.phone}</td>
-                      <td className="text-truncate-column">{user.email}</td>
-                      <td>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => deleteUser(index)}
-                        >
-                          Delete
-                        </Button>
-                       </td>
+              <div className="table-responsive">
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>Password</th>
+                      <th>PhoneNumber</th>
+                      <th>Email</th>
+                      <th>Handler</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <Row>
-              <Col className="d-flex justify-content-between align-items-center">
-                  <span className=" text-black">Save these users to the database</span>
-                  <Button variant="primary" onClick={saveUsers} className="w-48">
-                          Save 
-                    </Button>
-                    </Col>
+                  </thead>
+                  <tbody>
+                    {userList.map((user, index) => (
+                      <tr key={index}>
+                        <td className="text-truncate-column">
+                          {user.username}
+                        </td>
+                        <td className="text-truncate-column">
+                          {user.password}
+                        </td>
+                        <td className="text-truncate-column">{user.phone}</td>
+                        <td className="text-truncate-column">{user.email}</td>
+                        <td>
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => deleteUser(index)}
+                          >
+                            Delete
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+              <Row className="mt-3">
+                <Col className="d-flex justify-content-between align-items-center">
+                  <span>Save these users to the database</span>
+                  <Button variant="primary" onClick={saveUsers}>
+                    Save
+                  </Button>
+                </Col>
               </Row>
             </Card.Body>
           </Card>
         </Col>
       </Row>
-      <br/>
+      <br />
     </Container>
   );
 };

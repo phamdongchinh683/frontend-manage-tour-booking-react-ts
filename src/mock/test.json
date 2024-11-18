@@ -39,7 +39,7 @@
   "category": "tour",
   "id": "7",
   "name": "Tour List",
-  "linkRouter": "manage-tour/tour-list"
+  "linkRouter": "manage-tour/tour"
  },
  {
   "category": "payment",

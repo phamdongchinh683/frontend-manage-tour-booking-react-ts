@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from 'react';
-import { Button, Container, Form, Spinner } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
-import { UserUpdate } from '../../../../models/UserUpdate';
-import { UserService } from '../../../../services/User';
+import { FC, useEffect, useState } from "react";
+import { Button, Container, Form, Spinner } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserUpdate } from "../../../../models/UserUpdate";
+import { UserService } from "../../../../services/User";
 
 export const UserUpdateForm: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,13 +20,10 @@ export const UserUpdateForm: FC = () => {
         const userData = await getUserById(id);
         setUser(userData);
       } catch (error) {
-        console.error('Failed to fetch user:', error);
-        alert('Failed to load user details.');
-      } finally {
-        setLoading(false);
+        console.error("Failed to fetch user:", error);
+        setLoading(true);
       }
     };
-
     fetchUser();
   }, []);
 
@@ -39,30 +36,31 @@ export const UserUpdateForm: FC = () => {
     const formData = new FormData(e.currentTarget);
     const updatedData: UserUpdate = {
       id: user.id,
-      firstName: formData.get('firstName') as string,
-      lastName: formData.get('lastName') as string,
-      username: formData.get('username') as string,
-      age: formData.get('age') as string,
-      city: formData.get('city') as string,
-      email: formData.get('email') as string,
-      phone: formData.get('phone') as string,
-      role_id: formData.get('role_id') as string,
-      password: user.password, 
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
+      username: formData.get("username") as string,
+      age: formData.get("age") as string,
+      city: formData.get("city") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      role_id: formData.get("role_id") as string,
+      password: user.password,
     };
 
     try {
       await updateUser(updatedData);
-      alert('User updated successfully!');
-      navigate('/dashboard/manage-user');
+      navigate("/dashboard/manage-user");
     } catch (error) {
-      console.error('Failed to update user:', error);
-      alert('Failed to update user.');
+      alert("Failed to update user.");
     }
   };
 
-  if (loading) {
+  if (!loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
         <Spinner animation="border" variant="primary" />
       </div>
     );
@@ -72,7 +70,10 @@ export const UserUpdateForm: FC = () => {
     return (
       <Container>
         <h2>User not found</h2>
-        <Button onClick={() => navigate('/dashboard/manage-user/user')} variant="secondary">
+        <Button
+          onClick={() => navigate("/dashboard/manage-user/user")}
+          variant="secondary"
+        >
           Back
         </Button>
       </Container>
@@ -164,12 +165,15 @@ export const UserUpdateForm: FC = () => {
         <Button variant="primary" type="submit">
           Save Changes
         </Button>
-        <Button variant="secondary" className="ms-2" onClick={() => navigate('/dashboard/manage-user')}>
+        <Button
+          variant="secondary"
+          className="ms-2"
+          onClick={() => navigate("/dashboard/manage-user/user")}
+        >
           Cancel
         </Button>
       </Form>
-      <br/>
+      <br />
     </Container>
-    
   );
 };

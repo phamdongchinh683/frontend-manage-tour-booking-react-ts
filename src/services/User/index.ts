@@ -5,6 +5,7 @@ import { ProvinceResponse } from "../../models/ProvinceResponse";
 import { LoginResponse } from "../../models/TokenResponse";
 import { UserDetail } from "../../models/UserDetail";
 import { UserListDelete } from "../../models/UserListDelete";
+import { UsersResponse } from "../../models/UsersReponse";
 
 export function UserService() {
 
@@ -22,7 +23,7 @@ export function UserService() {
     }
   };
   
-  const getUsers = async () =>{
+  const getUsers = async (): Promise<UsersResponse[]> =>{
    try {
     const token = localStorage.getItem("token");
     if (!token) {

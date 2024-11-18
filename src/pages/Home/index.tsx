@@ -1,7 +1,7 @@
-import { FC } from "react";
+import React from "react";
 
-const Home: FC = () => {
-  return <><h1>This is dashboard</h1></>
+const Home: React.FC = () => {
+  return <h1>Empty</h1>;
 };
 
 export default Home;
