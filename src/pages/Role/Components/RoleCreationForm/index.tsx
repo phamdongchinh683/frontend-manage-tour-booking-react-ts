@@ -123,7 +123,7 @@ export const RoleCreationForm: FC = () => {
         <Col md={6}>
           <Card>
             <Card.Header className="bg-primary text-white">
-              Create New User
+              Create New Role
             </Card.Header>
             <Card.Body>
               {error && (
@@ -138,11 +138,11 @@ export const RoleCreationForm: FC = () => {
               <Form onSubmit={handleSubmit}>
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="formGridLastName">
-                    <Form.Label>Last Name</Form.Label>
+                    <Form.Label>Role Name</Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="last name"
-                      name="lastName"
+                      placeholder="role"
+                      name="role"
                       value={data.name}
                       onChange={handleChange}
                     />
@@ -170,10 +170,7 @@ export const RoleCreationForm: FC = () => {
                 <Table striped bordered hover>
                   <thead>
                     <tr>
-                      <th>Username</th>
-                      <th>Password</th>
-                      <th>PhoneNumber</th>
-                      <th>Email</th>
+                      <th>NameRole</th>
                       <th>Handler</th>
                     </tr>
                   </thead>
