@@ -45,7 +45,7 @@ export const UserCreationForm: FC = () => {
           getRoles(),
           provinceVietNam(),
         ]);
-        setRoles(rolesData);
+        setRoles(rolesData.data);
         setProvinces(provincesData);
       } catch (err) {
         setError("Failed to load roles or provinces.");

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { AdminLogin } from "../../models/AdminLogin";
 import { ApiResponse } from "../../models/ApiResponse";
+import { GuideList } from "../../models/GuideList";
 import { ProvinceResponse } from "../../models/ProvinceResponse";
 import { LoginResponse } from "../../models/TokenResponse";
 import { UserDetail } from "../../models/UserDetail";
@@ -13,7 +14,7 @@ export function UserService() {
     try {
       const response = await axios.post<LoginResponse>(
         process.env.REACT_APP_ADMIN_LOGIN || "",
-        loginData 
+        loginData
       );
       const token = response.data.data;;
       localStorage.setItem("token", token);
@@ -22,66 +23,66 @@ export function UserService() {
       throw err;
     }
   };
-  
-  const getUsers = async (): Promise<UsersResponse[]> =>{
-   try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-     throw new Error("Unauthorized");
-   }
-    const response = await axios.get(
-      process.env.REACT_APP_GET_USERS || "",
-      {
-       headers: {
-        token: `${token}`,
-      },
-      } 
-    );
-    return response.data.data;
-  } catch (err) {
-    throw err;
-  }
-  }
 
-const AddUsers = async (data: any): Promise<any> => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('Unauthorized');
-    }
-    const response: AxiosResponse<string> = await axios.post(
-      process.env.REACT_APP_CREATE_USERS || '',
-      data,
-      {
-        headers: {
-          token: `${token}`,
-        },
+  const getUsers = async (): Promise<UsersResponse[]> => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Unauthorized");
       }
-    );
-    return response.data;
-  } catch (err: any) {
-    if (err.response && err.response.data && err.response.data.message) {
-      return (err.response.data.message); 
-    } else if (err.message) {
-      return(err.message); 
-    } else {
-      return 'An unknown error occurred.'; 
+      const response = await axios.get(
+        process.env.REACT_APP_GET_USERS || "",
+        {
+          headers: {
+            token: `${token}`,
+          },
+        }
+      );
+      return response.data.data;
+    } catch (err) {
+      throw err;
+    }
   }
-};
-}
 
-  const getUserById = async(id: string): Promise<UserDetail | null> =>{
+  const AddUsers = async (data: any): Promise<any> => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Unauthorized');
+      }
+      const response: AxiosResponse<string> = await axios.post(
+        process.env.REACT_APP_CREATE_USERS || '',
+        data,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.message) {
+        return (err.response.data.message);
+      } else if (err.message) {
+        return (err.message);
+      } else {
+        return 'An unknown error occurred.';
+      }
+    };
+  }
+
+  const getUserById = async (id: string): Promise<UserDetail | null> => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error('Unauthorized');
       }
       const response: AxiosResponse<ApiResponse<UserDetail>> = await axios.get(
-        process.env.REACT_APP_DETAIL_USER+`${id}` || '',
+        process.env.REACT_APP_DETAIL_USER + `${id}` || '',
         {
           headers: {
             token: `${token}`,
-          }, 
+          },
         }
       );
       return response.data.data;
@@ -97,7 +98,7 @@ const AddUsers = async (data: any): Promise<any> => {
       if (!token) {
         throw new Error('Unauthorized');
       }
-  
+
       const response: AxiosResponse<string> = await axios.put(
         process.env.REACT_APP_UPDATE_USER || '',
         { user: data },
@@ -107,14 +108,14 @@ const AddUsers = async (data: any): Promise<any> => {
           },
         }
       );
-  
+
       return response.data;
     } catch (err) {
       throw err;
     }
   };
 
- const deleteUsers = async (data: UserListDelete[]) => {
+  const deleteUsers = async (data: UserListDelete[]) => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -126,7 +127,7 @@ const AddUsers = async (data: any): Promise<any> => {
           headers: {
             token: `${token}`,
           },
-          data: { users: data }, 
+          data: { users: data },
         }
       );
       return response.data;
@@ -143,15 +144,36 @@ const AddUsers = async (data: any): Promise<any> => {
         process.env.REACT_APP_GET_PROVINCES || "/provinces"
       );
       return response.data.results;
-        } catch (err) {
+    } catch (err) {
       console.error("Error fetching provinces:", err);
       throw err;
     }
   };
 
+  const guideList = async (): Promise<GuideList[]> => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Unauthorized");
+      }
+      const response = await axios.get(
+        process.env.REACT_APP_GET_GUIDES || "",
+        {
+          headers: {
+            token: `${token}`,
+          },
+        }
+      );
+      return response.data.data;
+    } catch (err) {
+      throw err;
+    }
+  }
+
 
   return {
     AddUsers,
+    guideList,
     updateUser,
     deleteUsers,
     adminLogin,

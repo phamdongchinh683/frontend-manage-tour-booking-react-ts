@@ -92,7 +92,6 @@ export const UserList: FC = () => {
     try {
       await deleteUsers(selectedIds.map((id) => ({ _id: id })));
       alert("Selected users deleted successfully!");
-      fetchUsers();
     } catch (error) {
       console.error("Failed to delete users:", error);
       alert("Unable to delete selected users. Please try again.");

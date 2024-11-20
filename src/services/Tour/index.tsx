@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { ApiResponse } from "../../models/ApiResponse";
 import { CloudinaryResponse } from "../../models/CloudinaryResponse";
 import { TourDetail } from "../../models/TourDetail";
+import { TourListDelete } from "../../models/TourListDelete";
 import { TourListResponse } from "../../models/TourListResponse";
 import { TourUpdate } from "../../models/TourUpdate";
 
@@ -24,32 +25,33 @@ export function TourService() {
     }
   };
 
-  // const AddTours = async (data: any): Promise<any> => {
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     if (!token) {
-  //       throw new Error('Unauthorized');
-  //     }
-  //     const response: AxiosResponse<string> = await axios.post(
-  //       process.env.REACT_APP_CREATE_TourS || '',
-  //       data,
-  //       {
-  //         headers: {
-  //           token: `${token}`,
-  //         },
-  //       }
-  //     );
-  //     return response.data;
-  //   } catch (err: any) {
-  //     if (err.response && err.response.data && err.response.data.message) {
-  //       return (err.response.data.message);
-  //     } else if (err.message) {
-  //       return(err.message);
-  //     } else {
-  //       return 'An unknown error occurred.';
-  //   }
-  // };
-  // }
+  const AddTours = async (data: any): Promise<string> => {
+    console.log(data);
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Unauthorized");
+      }
+      const response: AxiosResponse<string> = await axios.post(
+        process.env.REACT_APP_CREATE_TOUR || "",
+        data,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.message) {
+        return err.response.data.message;
+      } else if (err.message) {
+        return err.message;
+      } else {
+        return "An unknown error occurred.";
+      }
+    }
+  };
 
   const getTourById = async (id: string): Promise<ApiResponse<TourDetail>> => {
     try {
@@ -128,30 +130,32 @@ export function TourService() {
     }
   };
 
-  //  const deleteTours = async (data: TourListDelete[]) => {
-  //     try {
-  //       const token = localStorage.getItem('token');
-  //       if (!token) {
-  //         throw new Error('Unauthorized');
-  //       }
-  //       const response: AxiosResponse<string> = await axios.delete(
-  //         process.env.REACT_APP_DELETE_TourS || '',
-  //         {
-  //           headers: {
-  //             token: `${token}`,
-  //           },
-  //           data: { Tours: data },
-  //         }
-  //       );
-  //       return response.data;
-  //     } catch (err) {
-  //       console.error(err);
-  //       throw err;
-  //     }
-  //   };
+  const deleteTours = async (data: TourListDelete[]) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Unauthorized");
+      }
+      const response: AxiosResponse<string> = await axios.delete(
+        process.env.REACT_APP_DELETE_TOUR || "",
+        {
+          headers: {
+            token: `${token}`,
+          },
+          data: { tours: data },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
 
   return {
     getTours,
+    AddTours,
+    deleteTours,
     updateTour,
     uploadImage,
     getTourById,

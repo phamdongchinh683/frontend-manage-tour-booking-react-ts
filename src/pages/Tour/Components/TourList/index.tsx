@@ -7,7 +7,7 @@ import { TourListResponse } from "../../../../models/TourListResponse";
 import { TourService } from "../../../../services/Tour";
 
 export const TourList: FC = () => {
-  const { getTours } = TourService();
+  const { getTours, deleteTours } = TourService();
   const [list, setList] = useState<TourListResponse[]>([]);
   const [checkedTour, setCheckedTour] = useState<{ [key: string]: boolean }>(
     {}
@@ -69,6 +69,7 @@ export const TourList: FC = () => {
     }
 
     try {
+      await deleteTours([{ _id: tourId }]);
       setList((prevList) => prevList.filter((tour) => tour._id !== tourId));
     } catch (error) {
       console.error("Failed to delete the tour:", error);
@@ -89,7 +90,11 @@ export const TourList: FC = () => {
     }
 
     try {
-      fetchTours();
+      const ids = selectedIds.map((c) => {
+        return { _id: c };
+      });
+      await deleteTours(ids);
+      navigate("/dashboard/manage-tour/tour");
     } catch (error) {
       console.error("Failed to delete selected tours:", error);
     }
@@ -130,7 +135,6 @@ export const TourList: FC = () => {
               />
             </th>
             <th>Tour Name</th>
-            <th>Guide</th>
             <th>Price</th>
             <th>Features</th>
           </tr>
@@ -138,23 +142,15 @@ export const TourList: FC = () => {
         <tbody>
           {list.map((tour) => (
             <tr key={tour._id} className="align-middle text-center">
-              <td>
+              <td className="text-truncate-column">
                 <input
                   type="checkbox"
                   checked={checkedTour[tour._id] || false}
                   onChange={(e) => handleCheckboxChange(e, tour._id)}
                 />
               </td>
-              <td>{tour.city}</td>
-              <td>
-                {tour.guides
-                  .map(
-                    (guide) =>
-                      `${guide.fullName.firstName} ${guide.fullName.lastName}`
-                  )
-                  .join(", ")}
-              </td>
-              <td>
+              <td className="text-truncate-column">{tour.city}</td>
+              <td className="text-truncate-column">
                 Adult: ${tour.prices.adult}, Child: ${tour.prices.child}
               </td>
               <td className="d-flex gap-1 justify-content-center align-items-center">

@@ -24,7 +24,7 @@ input::-webkit-inner-spin-button {
 
 
 .table td.text-truncate-column {
- max-width: 150px; 
+ max-width: 100px;
  overflow: hidden;
  text-overflow: ellipsis;
  white-space: nowrap;

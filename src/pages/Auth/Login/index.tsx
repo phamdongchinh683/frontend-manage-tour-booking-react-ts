@@ -59,7 +59,7 @@ export const Login: FC = () => {
                   Login
                 </Button>
                 {error && (
-                  <p className="mt-3 text-danger text-center">{error}</p>
+                  <p className="mt-0 text-danger text-center">{error}</p>
                 )}
               </Form>
             </Card.Body>

@@ -68,7 +68,7 @@ export const TourDetailById: FC = () => {
             <strong>City:</strong> {tour.city}
           </div>
           <div className="mb-3">
-            <strong>Attractions:</strong> {tour.attractions.join(", ")}
+            <strong>Attractions:</strong> {tour.attractions}
           </div>
           <div className="mb-3">
             <strong>Days:</strong> {tour.days}

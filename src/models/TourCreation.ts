@@ -1,13 +1,12 @@
-import { GuideTour } from "./GuideTour";
-import { PriceTour } from "./PriceTour";
 
 export interface TourCreation {
- _id: string;
  city: string;
- attractions: string[];
+ attractions: string;
  days: string;
- prices: PriceTour;
- guides: GuideTour[];
+ prices: {
+  adult: number;
+  child: number;
+ }
+ guide: string;
  images: string[];
- createAt: string;
 }

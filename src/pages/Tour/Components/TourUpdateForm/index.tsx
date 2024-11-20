@@ -18,7 +18,7 @@ export const TourUpdateForm: FC = () => {
         return;
       }
       try {
-        const tourData = await getTourById(id);
+        const tourData: any = await getTourById(id);
         setTour(tourData.data);
         setLoading(false);
       } catch (error) {
@@ -33,7 +33,6 @@ export const TourUpdateForm: FC = () => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
       const uploadedImages: string[] = [];
-
       for (const file of files) {
         try {
           const publicId = await uploadImage(file);
@@ -44,7 +43,6 @@ export const TourUpdateForm: FC = () => {
           console.error("Failed to upload image", error);
         }
       }
-
       setImages((prevImages) => [...prevImages, ...uploadedImages]);
     }
   };
@@ -58,21 +56,20 @@ export const TourUpdateForm: FC = () => {
     const updatedData: TourUpdate = {
       _id: tour._id,
       city: formData.get("city") as string,
-      attractions: (formData.get("attractions") as string).split(","),
+      attractions: formData.get("attractions") as string,
       days: formData.get("days") as string,
       prices: {
         adult: formData.get("adultPrice") as string,
         child: formData.get("childPrice") as string,
       },
-      guides: tour.guides,
+      guide: tour.guide,
       images: images,
       createAt: tour.createAt,
     };
 
     try {
       await updateTour(updatedData);
-      // navigate("/dashboard/manage-tour/tour");
-      // alert("Updated tour");
+      alert("Updated tour");
     } catch (error) {
       alert("Failed to update tour.");
       console.error(error);
@@ -123,7 +120,7 @@ export const TourUpdateForm: FC = () => {
             type="text"
             name="attractions"
             placeholder="Enter attractions, separated by commas"
-            defaultValue={tour.attractions.join(", ")}
+            defaultValue={tour.attractions}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -176,7 +173,7 @@ export const TourUpdateForm: FC = () => {
           Cancel
         </Button>
       </Form>
-      <br/>
+      <br />
     </Container>
   );
 };

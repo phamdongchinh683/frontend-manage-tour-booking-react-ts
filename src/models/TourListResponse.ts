@@ -7,7 +7,7 @@ export interface TourListResponse {
  attractions: string[];
  days: string;
  prices: PriceTour;
- guides: GuideTour[];
+ guide: string;
  images: string[];
  createAt: string; 
 }
