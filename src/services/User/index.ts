@@ -20,7 +20,7 @@ export function UserService() {
       localStorage.setItem("token", token);
       return token;
     } catch (err) {
-      throw err;
+      throw err
     }
   };
 

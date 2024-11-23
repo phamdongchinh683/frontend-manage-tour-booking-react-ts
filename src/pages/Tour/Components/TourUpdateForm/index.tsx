@@ -68,7 +68,7 @@ export const TourUpdateForm: FC = () => {
     };
 
     try {
-      await updateTour(updatedData);
+      await Promise.all([updateTour(updatedData), images]);
       alert("Updated tour");
     } catch (error) {
       alert("Failed to update tour.");
@@ -153,14 +153,6 @@ export const TourUpdateForm: FC = () => {
         <Form.Group className="mb-3">
           <Form.Label>Upload Images</Form.Label>
           <Form.Control type="file" multiple onChange={handleFileChange} />
-          <div className="mt-2">
-            <strong>Uploaded Images:</strong>
-            <ul>
-              {images.map((image, index) => (
-                <li key={index}>{image}</li>
-              ))}
-            </ul>
-          </div>
         </Form.Group>
         <Button variant="primary" type="submit">
           Save Changes

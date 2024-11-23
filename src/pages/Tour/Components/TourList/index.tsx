@@ -2,7 +2,6 @@ import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { Button, Container, Spinner, Table } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import ButtonPage from "../../../../components/Button";
-import { ApiResponse } from "../../../../models/ApiResponse";
 import { TourListResponse } from "../../../../models/TourListResponse";
 import { TourService } from "../../../../services/Tour";
 
@@ -18,7 +17,7 @@ export const TourList: FC = () => {
 
   const fetchTours = async () => {
     try {
-      const tours: ApiResponse<TourListResponse[]> = await getTours();
+      const tours: any = await getTours();
       setList(tours.data);
       setCheckedTour(checkedTour);
     } catch (error) {
@@ -100,17 +99,6 @@ export const TourList: FC = () => {
     }
   };
 
-  if (list.length === 0) {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "100vh" }}
-      >
-        <Spinner animation="border" variant="primary" />
-      </div>
-    );
-  }
-
   return (
     <Container>
       <div className="tours-header d-flex justify-content-between align-items-center">
@@ -124,60 +112,81 @@ export const TourList: FC = () => {
           </Button>
         </div>
       </div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                checked={selectAll}
-                onChange={handleSelectAllChange}
-              />
-            </th>
-            <th>Tour Name</th>
-            <th>Price</th>
-            <th>Features</th>
-          </tr>
-        </thead>
-        <tbody>
-          {list.map((tour) => (
-            <tr key={tour._id} className="align-middle text-center">
-              <td className="text-truncate-column">
+
+      {list.length === 0 ? (
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: "100vh" }}
+        >
+          <Spinner animation="border" variant="primary" />
+        </div>
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>
                 <input
                   type="checkbox"
-                  checked={checkedTour[tour._id] || false}
-                  onChange={(e) => handleCheckboxChange(e, tour._id)}
+                  checked={selectAll}
+                  onChange={handleSelectAllChange}
                 />
-              </td>
-              <td className="text-truncate-column">{tour.city}</td>
-              <td className="text-truncate-column">
-                Adult: ${tour.prices.adult}, Child: ${tour.prices.child}
-              </td>
-              <td className="d-flex gap-1 justify-content-center align-items-center">
-                <Button
-                  variant="info"
-                  className="me-2"
-                  onClick={() =>
-                    navigate(`/dashboard/manage-tour/detail-tour/${tour._id}`)
-                  }
-                >
-                  Detail
-                </Button>
-                <ButtonPage
-                  color="primary"
-                  text="Edit"
-                  fun={() => editTour(tour._id)}
-                />
-                <ButtonPage
-                  color="danger"
-                  text="Delete"
-                  fun={() => deleteTourById(tour._id)}
-                />
-              </td>
+              </th>
+              <th>Tour Name</th>
+              <th>Price</th>
+              <th>Features</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {Array.isArray(list) && list.length === 0 ? (
+              <div
+                className="d-flex justify-content-center align-items-center"
+                style={{ height: "100vh" }}
+              >
+                <Spinner animation="border" variant="primary" />
+              </div>
+            ) : (
+              list.map((tour) => (
+                <tr key={tour._id} className="align-middle text-center">
+                  <td className="text-truncate-column">
+                    <input
+                      type="checkbox"
+                      checked={checkedTour[tour._id] || false}
+                      onChange={(e) => handleCheckboxChange(e, tour._id)}
+                    />
+                  </td>
+                  <td className="text-truncate-column">{tour.city}</td>
+                  <td className="text-truncate-column">
+                    Adult: ${tour.prices.adult}, Child: ${tour.prices.child}
+                  </td>
+                  <td className="d-flex gap-1 justify-content-center align-items-center">
+                    <Button
+                      variant="info"
+                      className="me-2"
+                      onClick={() =>
+                        navigate(
+                          `/dashboard/manage-tour/detail-tour/${tour._id}`
+                        )
+                      }
+                    >
+                      Detail
+                    </Button>
+                    <ButtonPage
+                      color="primary"
+                      text="Edit"
+                      fun={() => editTour(tour._id)}
+                    />
+                    <ButtonPage
+                      color="danger"
+                      text="Delete"
+                      fun={() => deleteTourById(tour._id)}
+                    />
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
+      )}
     </Container>
   );
 };

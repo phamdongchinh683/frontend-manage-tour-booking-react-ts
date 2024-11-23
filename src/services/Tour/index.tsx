@@ -7,7 +7,7 @@ import { TourListResponse } from "../../models/TourListResponse";
 import { TourUpdate } from "../../models/TourUpdate";
 
 export function TourService() {
-  const getTours = async (): Promise<ApiResponse<TourListResponse[]>> => {
+  const getTours = async (): Promise<ApiResponse<TourListResponse[]> | string> => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {

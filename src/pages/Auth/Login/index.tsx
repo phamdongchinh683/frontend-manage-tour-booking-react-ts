@@ -13,13 +13,12 @@ export const Login: FC = () => {
     e.preventDefault();
     setError(null);
     const loginData: AdminLogin = { username, password };
-    try {
-      await adminLogin(loginData);
+    const loginAdmin = await adminLogin(loginData);
+    if (loginAdmin) {
       alert("Login successful!");
       window.location.reload();
-    } catch (err) {
-      setError("Invalid username or password.");
     }
+    setError(loginAdmin);
   };
 
   return (
