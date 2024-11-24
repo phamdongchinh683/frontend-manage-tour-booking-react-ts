@@ -18,7 +18,7 @@ export const Login: FC = () => {
       alert("Login successful!");
       window.location.reload();
     }
-    setError(loginAdmin);
+    setError("username or password incorrect");
   };
 
   return (
