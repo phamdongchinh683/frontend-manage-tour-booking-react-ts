@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AdminLogin } from "../../../models/AdminLogin";
 import { UserService } from "../../../services/User";
 
@@ -13,12 +13,12 @@ export const Login: FC = () => {
     e.preventDefault();
     setError(null);
     const loginData: AdminLogin = { username, password };
-    const loginAdmin = await adminLogin(loginData);
-    if (loginAdmin) {
-      alert("Login successful!");
-      window.location.reload();
+    const loginAdmin: any = await adminLogin(loginData);
+
+    if (loginAdmin.status === "success") {
+      window.location.replace("/dashboard");
     }
-    setError("username or password incorrect");
+    setError(loginAdmin);
   };
 
   return (
@@ -30,9 +30,7 @@ export const Login: FC = () => {
         <Col xs={12} sm={8} md={6} lg={4} className="mx-auto">
           <Card className="shadow-lg border-0 justify-content-center">
             <Card.Body>
-              <h3 className="text-center mb-4 text-danger">
-                Welcome Admin Site
-              </h3>
+              <h3 className="text-center mb-4 text-danger">Welcome</h3>
               <Form onSubmit={handleLogin}>
                 <Form.Group className="mb-3" controlId="formBasicUsername">
                   <Form.Label>Username</Form.Label>
@@ -58,7 +56,7 @@ export const Login: FC = () => {
                   Login
                 </Button>
                 {error && (
-                  <p className="mt-0 text-danger text-center">{error}</p>
+                  <p className="mt-0 p-0 text-danger text-center">{error}</p>
                 )}
               </Form>
             </Card.Body>
@@ -66,7 +64,7 @@ export const Login: FC = () => {
               <small>
                 Don't have an account?
                 <Link
-                  to="/https://www.facebook.com/vegetarian2003"
+                  to="https://www.facebook.com/vegetarian2003"
                   className="text-primary ms-1"
                 >
                   Contact Admin

@@ -10,7 +10,7 @@ import { UsersResponse } from "../../models/UsersReponse";
 
 export function UserService() {
 
-  const adminLogin = async (loginData: AdminLogin): Promise<string> => {
+  const adminLogin = async (loginData: AdminLogin): Promise<any> => {
     try {
       const response = await axios.post<LoginResponse>(
         process.env.REACT_APP_ADMIN_LOGIN || "",
@@ -18,9 +18,15 @@ export function UserService() {
       );
       const token = response.data.data;;
       localStorage.setItem("token", token);
-      return token;
-    } catch (err) {
-      throw err
+      return response.data;
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.message) {
+        return (err.response.data.message);
+      } else if (err.message) {
+        return (err.message);
+      } else {
+        return 'An unknown error occurred.';
+      }
     }
   };
 
