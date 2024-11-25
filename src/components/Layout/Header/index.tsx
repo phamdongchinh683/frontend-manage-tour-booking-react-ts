@@ -2,15 +2,14 @@ import { FC } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useToken from "../../../jwt/useToken";
 import navLink from "../../../mock/test.json";
 import LogOut from "../../../pages/Auth/Logout";
 export const Header: FC = () => {
   const { deleteToken } = useToken();
-  const navigate = useNavigate();
   const logout = async () => {
-    window.location.replace("/login")
+    window.location.replace("/");
     deleteToken();
   };
   return (

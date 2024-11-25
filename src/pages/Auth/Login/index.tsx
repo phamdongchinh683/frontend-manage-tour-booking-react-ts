@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AdminLogin } from "../../../models/AdminLogin";
 import { UserService } from "../../../services/User";
 
@@ -16,7 +16,7 @@ export const Login: FC = () => {
     const loginAdmin: any = await adminLogin(loginData);
 
     if (loginAdmin.status === "success") {
-      window.location.replace("/dashboard");
+      window.location.replace("/");
     }
     setError(loginAdmin);
   };

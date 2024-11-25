@@ -37,7 +37,6 @@ export const UserDetailById: FC = () => {
     );
   }
 
-  console.log(user);
   if (!user) {
     return (
       <div className="text-center mt-4">
