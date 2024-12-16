@@ -35,7 +35,7 @@ export const UserUpdateForm: FC = () => {
 
     const formData = new FormData(e.currentTarget);
     const updatedData: UserUpdate = {
-      id: user.id,
+      id: id,
       firstName: formData.get("firstName") as string,
       lastName: formData.get("lastName") as string,
       username: formData.get("username") as string,
@@ -49,7 +49,7 @@ export const UserUpdateForm: FC = () => {
 
     try {
       await updateUser(updatedData);
-      navigate("/dashboard/manage-user");
+      navigate("/dashboard/manage-user/user");
     } catch (error) {
       alert("Failed to update user.");
     }
@@ -156,6 +156,7 @@ export const UserUpdateForm: FC = () => {
         <Form.Group className="mb-3">
           <Form.Label>Role ID</Form.Label>
           <Form.Control
+            disabled
             type="text"
             name="role_id"
             placeholder="Enter role ID"

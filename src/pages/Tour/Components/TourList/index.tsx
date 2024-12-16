@@ -1,7 +1,8 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import { Button, Container, Spinner, Table } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { ChangeEvent, FC, useEffect, useState } from "react";
+import { Button, Spinner, Table } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ButtonPage from "../../../../components/Button";
+import TableList from "../../../../components/TableList";
 import { TourListResponse } from "../../../../models/TourListResponse";
 import { TourService } from "../../../../services/Tour";
 
@@ -11,26 +12,51 @@ export const TourList: FC = () => {
   const [checkedTour, setCheckedTour] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [prevCursor, setPrevCursor] = useState<string | null>(null);
+  const query = new URLSearchParams(useLocation().search);
   const [selectAll, setSelectAll] = useState(false);
   const navigate = useNavigate();
-  const apiCall = useRef(true);
 
-  const fetchTours = async () => {
+  const fetchTours = async (cursor: string | null, direction: string) => {
     try {
-      const tours: any = await getTours();
-      setList(tours.data);
-      setCheckedTour(checkedTour);
+      const page: any = await getTours(cursor, direction);
+      setList(page.data.tours);
+      setNextCursor(page.data.nextCursor);
+      setPrevCursor(page.data.prevCursor);
+      setCheckedTour({});
     } catch (error) {
       console.error("Failed to fetch tours:", error);
     }
   };
 
   useEffect(() => {
-    if (apiCall.current) {
-      apiCall.current = false;
-      fetchTours();
+    const cursorQuery = query.get("cursor");
+    const directionQuery = query.get("direction") || "next";
+    if (cursorQuery) {
+      fetchTours(cursorQuery, directionQuery);
+    } else {
+      fetchTours(null, "next");
     }
   }, []);
+
+  const pageNext = () => {
+    if (nextCursor) {
+      fetchTours(nextCursor, "next");
+      navigate(
+        `/dashboard/manage-tour/tour?cursor=${nextCursor}&direction=next`
+      );
+    }
+  };
+
+  const pagePrev = () => {
+    if (prevCursor) {
+      fetchTours(prevCursor, "prev");
+      navigate(
+        `/dashboard/manage-tour/tour?cursor=${prevCursor}&direction=prev`
+      );
+    }
+  };
 
   const updateCheckedState = (updatedState: { [key: string]: boolean }) => {
     setCheckedTour(updatedState);
@@ -89,104 +115,104 @@ export const TourList: FC = () => {
     }
 
     try {
-      const ids = selectedIds.map((c) => {
-        return { _id: c };
-      });
+      const ids = selectedIds.map((id) => ({ _id: id }));
       await deleteTours(ids);
-      navigate("/dashboard/manage-tour/tour");
+      setList((prevList) =>
+        prevList.filter((tour) => !selectedIds.includes(tour._id))
+      );
     } catch (error) {
       console.error("Failed to delete selected tours:", error);
     }
   };
 
+  const tableData = list.map((tour) => (
+    <tr key={tour._id} className="align-middle text-center">
+      <td>
+        <input
+          type="checkbox"
+          checked={checkedTour[tour._id] || false}
+          onChange={(e) => handleCheckboxChange(e, tour._id)}
+        />
+      </td>
+      <td>{tour.city || "N/A"}</td>
+      <td>
+        Adult: ${tour.prices?.adult || 0}, Child: ${tour.prices?.child || 0}
+      </td>
+      <td className="d-flex gap-1 justify-content-center align-items-center">
+        <Button
+          variant="info"
+          className="me-2"
+          onClick={() =>
+            navigate(`/dashboard/manage-tour/detail-tour/${tour._id}`)
+          }
+        >
+          Detail
+        </Button>
+        <ButtonPage
+          color="primary"
+          text="Edit"
+          fun={() => editTour(tour._id)}
+        />
+        <ButtonPage
+          color="danger"
+          text="Delete"
+          fun={() => deleteTourById(tour._id)}
+        />
+      </td>
+    </tr>
+  ));
+
   return (
-    <Container>
-      <div className="tours-header d-flex justify-content-between align-items-center">
-        <h1>Tours</h1>
+    <TableList
+      title="Tours"
+      create={
+        <Link to="/dashboard/manage-tour/create-tour">
+          <Button variant="success">Create</Button>
+        </Link>
+      }
+      deletes={
+        <Button variant="danger" onClick={deleteSelectedTours}>
+          Delete tours
+        </Button>
+      }
+      data={
+        list.length === 0 ? (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ height: "50vh" }}
+          >
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : (
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={selectAll}
+                    onChange={handleSelectAllChange}
+                  />
+                </th>
+                <th>Tour Name</th>
+                <th>Price</th>
+                <th>Features</th>
+              </tr>
+            </thead>
+            <tbody>{tableData}</tbody>
+          </Table>
+        )
+      }
+      page={
         <div className="d-flex gap-2">
-          <Link to="/dashboard/manage-tour/create-tour">
-            <Button variant="success">Create</Button>
-          </Link>
-          <Button variant="danger" onClick={deleteSelectedTours}>
-            Delete tours
+          <Button variant="primary" onClick={pagePrev} disabled={!prevCursor}>
+            Previous
+          </Button>
+          <Button variant="primary" onClick={pageNext} disabled={!nextCursor}>
+            Next
           </Button>
         </div>
-      </div>
-
-      {list.length === 0 ? (
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{ height: "100vh" }}
-        >
-          <Spinner animation="border" variant="primary" />
-        </div>
-      ) : (
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={selectAll}
-                  onChange={handleSelectAllChange}
-                />
-              </th>
-              <th>Tour Name</th>
-              <th>Price</th>
-              <th>Features</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(list) && list.length === 0 ? (
-              <div
-                className="d-flex justify-content-center align-items-center"
-                style={{ height: "100vh" }}
-              >
-                <Spinner animation="border" variant="primary" />
-              </div>
-            ) : (
-              list.map((tour) => (
-                <tr key={tour._id} className="align-middle text-center">
-                  <td className="text-truncate-column">
-                    <input
-                      type="checkbox"
-                      checked={checkedTour[tour._id] || false}
-                      onChange={(e) => handleCheckboxChange(e, tour._id)}
-                    />
-                  </td>
-                  <td className="text-truncate-column">{tour.city}</td>
-                  <td className="text-truncate-column">
-                    Adult: ${tour.prices.adult}, Child: ${tour.prices.child}
-                  </td>
-                  <td className="d-flex gap-1 justify-content-center align-items-center">
-                    <Button
-                      variant="info"
-                      className="me-2"
-                      onClick={() =>
-                        navigate(
-                          `/dashboard/manage-tour/detail-tour/${tour._id}`
-                        )
-                      }
-                    >
-                      Detail
-                    </Button>
-                    <ButtonPage
-                      color="primary"
-                      text="Edit"
-                      fun={() => editTour(tour._id)}
-                    />
-                    <ButtonPage
-                      color="danger"
-                      text="Delete"
-                      fun={() => deleteTourById(tour._id)}
-                    />
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
-      )}
-    </Container>
+      }
+    />
   );
 };

@@ -3,7 +3,7 @@ import { Button, Card, Container, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { TourDetail } from "../../../../models/TourDetail";
 import { TourService } from "../../../../services/Tour";
-import TourImage from "../TourImage"; // Make sure you have the correct component for displaying images
+import TourImage from "../TourImage"; 
 
 export const TourDetailById: FC = () => {
   const { id } = useParams<{ id: string }>();

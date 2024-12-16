@@ -1,7 +1,8 @@
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import { Button, Container, Spinner, Table } from "react-bootstrap";
+import { Button, Spinner, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ButtonPage from "../../../../components/Button";
+import TableList from "../../../../components/TableList";
 import { ApiResponse } from "../../../../models/ApiResponse";
 import { RoleListResponse } from "../../../../models/RoleListResponse";
 import { RoleService } from "../../../../services/Role";
@@ -93,66 +94,67 @@ export const RoleList: FC = () => {
     }
   };
 
-  if (list.length === 0) {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "100vh" }}
-      >
-        <Spinner animation="border" variant="primary" />
-      </div>
-    );
-  }
+  const tableData = list.map((role) => (
+    <tr key={role._id} className="align-middle text-center">
+      <td>
+        <input
+          type="checkbox"
+          checked={checkedRole[role._id] || false}
+          onChange={(e) => handleCheckboxChange(e, role._id)}
+        />
+      </td>
+      <td>{role.name}</td>
+      <td className="d-flex gap-1 justify-content-center align-items-center">
+        <ButtonPage
+          color="danger"
+          text="Delete"
+          fun={() => deleteById(role._id)}
+        />
+      </td>
+    </tr>
+  ));
 
   return (
-    <Container>
-      <div className="roles-header d-flex justify-content-between align-items-center">
-        <h1>roles</h1>
-        <div className="d-flex gap-2">
-          <Link to="/dashboard/manage-role/create-role">
-            <Button variant="success">Create</Button>
-          </Link>
-          <Button variant="danger" onClick={deleteSelectedRoles}>
-            Delete roles
-          </Button>
-        </div>
-      </div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                checked={selectAll}
-                onChange={handleSelectAllChange}
-              />
-            </th>
-            <th>Role Name</th>
-            <th>Features</th>
-          </tr>
-        </thead>
-        <tbody>
-          {list.map((role) => (
-            <tr key={role._id} className="align-middle text-center">
-              <td>
-                <input
-                  type="checkbox"
-                  checked={checkedRole[role._id] || false}
-                  onChange={(e) => handleCheckboxChange(e, role._id)}
-                />
-              </td>
-              <td>{role.name}</td>
-              <td className="d-flex gap-1 justify-content-center align-items-center">
-                <ButtonPage
-                  color="danger"
-                  text="Delete"
-                  fun={() => deleteById(role._id)}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
+    <TableList
+      title="Roles"
+      create={
+        <Link to="/dashboard/manage-role/create-role">
+          <Button variant="success">Create</Button>
+        </Link>
+      }
+      deletes={
+        <Button variant="danger" onClick={deleteSelectedRoles}>
+          Delete roles
+        </Button>
+      }
+      data={
+        list.length === 0 ? (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ height: "50vh" }}
+          >
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : (
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={selectAll}
+                    onChange={handleSelectAllChange}
+                  />
+                </th>
+                <th>Role Name</th>
+                <th>Features</th>
+              </tr>
+            </thead>
+            <tbody>{tableData}</tbody>
+          </Table>
+        )
+      }
+      page={null}
+    />
   );
 };

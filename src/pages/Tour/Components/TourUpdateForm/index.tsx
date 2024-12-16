@@ -70,6 +70,7 @@ export const TourUpdateForm: FC = () => {
     try {
       await Promise.all([updateTour(updatedData), images]);
       alert("Updated tour");
+      navigate("/dashboard/manage-tour/tour")
     } catch (error) {
       alert("Failed to update tour.");
       console.error(error);

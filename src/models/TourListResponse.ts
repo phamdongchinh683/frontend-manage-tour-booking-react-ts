@@ -1,6 +1,4 @@
-import { GuideTour } from "./GuideTour";
 import { PriceTour } from "./PriceTour";
-
 export interface TourListResponse {
  _id: string;
  city: string;
@@ -9,5 +7,5 @@ export interface TourListResponse {
  prices: PriceTour;
  guide: string;
  images: string[];
- createAt: string; 
+ createAt: string;
 }

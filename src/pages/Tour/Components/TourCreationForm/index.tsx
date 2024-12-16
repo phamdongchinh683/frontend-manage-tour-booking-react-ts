@@ -63,10 +63,8 @@ export const TourCreationForm: FC = () => {
   const deleteTourById = (index: number) => {
     const saveTours = localStorage.getItem("tours");
     const tours = saveTours ? JSON.parse(saveTours) : [];
-
     tours.splice(index, 1);
     localStorage.setItem("users", JSON.stringify(tours));
-
     setTourList(tours);
   };
   const validateForm = (): string | null => {

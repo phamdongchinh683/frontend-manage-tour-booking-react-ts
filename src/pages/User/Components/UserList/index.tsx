@@ -1,7 +1,8 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import { Button, Container, Spinner, Table } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { ChangeEvent, FC, useEffect, useState } from "react";
+import { Button, Spinner, Table } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ButtonPage from "../../../../components/Button";
+import TableList from "../../../../components/TableList";
 import { UsersResponse } from "../../../../models/UsersReponse";
 import { UserService } from "../../../../services/User";
 
@@ -11,16 +12,20 @@ export const UserList: FC = () => {
   const [checkedUsers, setCheckedUsers] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [prevCursor, setPrevCursor] = useState<string | null>(null);
   const [selectAll, setSelectAll] = useState(false);
   const navigate = useNavigate();
-  const apiCall = useRef(true);
+  const query = new URLSearchParams(useLocation().search);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (cursor: string | null, direction: string) => {
     try {
-      const users = await getUsers();
-      setList(users);
+      const page: any = await getUsers(cursor, direction);
+      setList(page.users);
+      setNextCursor(page.nextCursor);
+      setPrevCursor(page.prevCursor);
       const initialCheckedState = Object.fromEntries(
-        users.map((user: any) => [user._id, false])
+        list.map((user: any) => [user._id, false])
       );
       setCheckedUsers(initialCheckedState);
     } catch (error) {
@@ -29,11 +34,32 @@ export const UserList: FC = () => {
   };
 
   useEffect(() => {
-    if (apiCall.current) {
-      apiCall.current = false;
-      fetchUsers();
+    const cursorQuery = query.get("cursor");
+    const directionQuery = query.get("direction") || "next";
+    if (cursorQuery) {
+      fetchUsers(cursorQuery, directionQuery);
+    } else {
+      fetchUsers(null, "next");
     }
   }, []);
+
+  const pageNext = () => {
+    if (nextCursor) {
+      fetchUsers(nextCursor, "next");
+      navigate(
+        `/dashboard/manage-user/user?cursor=${nextCursor}&direction=next`
+      );
+    }
+  };
+
+  const pagePrev = () => {
+    if (prevCursor) {
+      fetchUsers(prevCursor, "prev");
+      navigate(
+        `/dashboard/manage-user/user?cursor=${prevCursor}&direction=prev`
+      );
+    }
+  };
 
   const updateCheckedState = (updatedState: { [key: string]: boolean }) => {
     setCheckedUsers(updatedState);
@@ -97,93 +123,100 @@ export const UserList: FC = () => {
       alert("Unable to delete selected users. Please try again.");
     }
   };
-
-  if (list.length === 0) {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "100vh" }}
-      >
-        <Spinner animation="border" variant="primary" />
-      </div>
-    );
-  }
+  const tableData = list.map((user) => (
+    <tr key={user._id} className="align-middle text-center">
+      <td>
+        <input
+          type="checkbox"
+          checked={checkedUsers[user._id] || false}
+          onChange={(e) => handleCheckboxChange(e, user._id)}
+        />
+      </td>
+      <td> {user.fullName?.firstName} </td>
+      <td> {user.fullName?.lastName} </td>
+      <td> {user.username} </td>
+      <td> {user.age} </td>
+      <td> {user.contact?.email} </td>
+      <td> {user.contact?.phone} </td>
+      <td className="d-flex gap-1 justify-content-center align-items-center">
+        <Button
+          variant="info"
+          className="me-2"
+          onClick={() =>
+            navigate(`/dashboard/manage-user/detail-user/${user._id}`)
+          }
+        >
+          Detail
+        </Button>
+        <ButtonPage
+          color="primary"
+          text="Edit"
+          fun={() => editUser(user._id)}
+        />
+        <ButtonPage
+          color="danger"
+          text="Delete"
+          fun={() => deleteUserById(user._id)}
+        />
+      </td>
+    </tr>
+  ));
 
   return (
-    <Container>
-      <div className="users-header d-flex justify-content-between align-items-center">
-        <h1>Users</h1>
+    <TableList
+      title="Users"
+      create={
+        <Link to="/dashboard/manage-user/create-user">
+          <Button variant="success">Create</Button>
+        </Link>
+      }
+      deletes={
+        <Button variant="danger" onClick={deleteUserByIds}>
+          Delete Users
+        </Button>
+      }
+      data={
+        list.length === 0 ? (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ height: "50vh" }}
+          >
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : (
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={selectAll}
+                    onChange={handleSelectAllChange}
+                  />
+                </th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Features</th>
+              </tr>
+            </thead>
+            <tbody>{tableData}</tbody>
+          </Table>
+        )
+      }
+      page={
         <div className="d-flex gap-2">
-          <Link to="/dashboard/manage-user/create-user">
-            <Button variant="success">Create</Button>
-          </Link>
-          <Button variant="danger" onClick={deleteUserByIds}>
-            Delete Users
+          <Button variant="primary" onClick={pagePrev} disabled={!prevCursor}>
+            Previous
+          </Button>
+          <Button variant="primary" onClick={pageNext} disabled={!nextCursor}>
+            Next
           </Button>
         </div>
-      </div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                checked={selectAll}
-                onChange={handleSelectAllChange}
-              />
-            </th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-            <th>Age</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Features</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          
-          {list.map((user) => (
-            <tr key={user._id} className="align-middle text-center">
-              <td>
-                <input
-                  type="checkbox"
-                  checked={checkedUsers[user._id] || false}
-                  onChange={(e) => handleCheckboxChange(e, user._id)}
-                />
-              </td>
-              <td>{user.fullName?.firstName}</td>
-              <td>{user.fullName?.lastName}</td>
-              <td>{user.username}</td>
-              <td>{user.age}</td>
-              <td>{user.contact?.email}</td>
-              <td>{user.contact?.phone}</td>
-              <td className="d-flex gap-1 justify-content-center align-items-center">
-                <Button
-                  variant="info"
-                  className="me-2"
-                  onClick={() =>
-                    navigate(`/dashboard/manage-user/detail-user/${user._id}`)
-                  }
-                >
-                  Detail
-                </Button>
-                <ButtonPage
-                  color="primary"
-                  text="Edit"
-                  fun={() => editUser(user._id)}
-                />
-                <ButtonPage
-                  color="danger"
-                  text="Delete"
-                  fun={() => deleteUserById(user._id)}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
+      }
+    />
   );
 };

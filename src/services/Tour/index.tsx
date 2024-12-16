@@ -3,18 +3,23 @@ import { ApiResponse } from "../../models/ApiResponse";
 import { CloudinaryResponse } from "../../models/CloudinaryResponse";
 import { TourDetail } from "../../models/TourDetail";
 import { TourListDelete } from "../../models/TourListDelete";
-import { TourListResponse } from "../../models/TourListResponse";
+import { TourPaginate } from "../../models/TourPaginate";
 import { TourUpdate } from "../../models/TourUpdate";
 
 export function TourService() {
-  const getTours = async (): Promise<ApiResponse<TourListResponse[]> | string> => {
+  const token = localStorage.getItem("token");
+
+  const getTours = async (
+    cursor: string | null,
+    direction: string
+  ): Promise<ApiResponse<TourPaginate> | any> => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Unauthorized");
       }
-      const response: AxiosResponse<ApiResponse<TourListResponse[]>> =
+      const response: AxiosResponse<ApiResponse<TourPaginate>> =
         await axios.get(process.env.REACT_APP_TOUR_LIST || "", {
+          params: { cursor, direction },
           headers: {
             token: `${token}`,
           },
@@ -26,9 +31,7 @@ export function TourService() {
   };
 
   const AddTours = async (data: any): Promise<string> => {
-    console.log(data);
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Unauthorized");
       }
@@ -55,7 +58,6 @@ export function TourService() {
 
   const getTourById = async (id: string): Promise<ApiResponse<TourDetail>> => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Unauthorized");
       }
@@ -77,14 +79,10 @@ export function TourService() {
   const uploadImage = async (file: File): Promise<string | undefined> => {
     const uploadImageApi = process.env.REACT_APP_CLOUDINARY_UPLOAD_URL;
     if (!uploadImageApi) {
-      console.log(
-        "Cloudinary API URL is not defined in the environment variables."
-      );
       return;
     }
 
     if (!file) {
-      console.error("No file selected");
       return;
     }
     const data = new FormData();
@@ -109,7 +107,6 @@ export function TourService() {
 
   const updateTour = async (data: TourUpdate) => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Unauthorized");
       }
@@ -132,7 +129,6 @@ export function TourService() {
 
   const deleteTours = async (data: TourListDelete[]) => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Unauthorized");
       }

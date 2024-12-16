@@ -2,13 +2,14 @@ import axios, { AxiosResponse } from "axios";
 import { AdminLogin } from "../../models/AdminLogin";
 import { ApiResponse } from "../../models/ApiResponse";
 import { GuideList } from "../../models/GuideList";
+import { UserPaginate } from "../../models/IUserPaginate";
 import { ProvinceResponse } from "../../models/ProvinceResponse";
 import { LoginResponse } from "../../models/TokenResponse";
 import { UserDetail } from "../../models/UserDetail";
 import { UserListDelete } from "../../models/UserListDelete";
-import { UsersResponse } from "../../models/UsersReponse";
-
 export function UserService() {
+
+  const token = localStorage.getItem("token");
 
   const adminLogin = async (loginData: AdminLogin): Promise<any> => {
     try {
@@ -16,8 +17,7 @@ export function UserService() {
         process.env.REACT_APP_ADMIN_LOGIN || "",
         loginData
       );
-      const token = response.data.data;;
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", response.data.data);
       return response.data;
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.message) {
@@ -30,15 +30,16 @@ export function UserService() {
     }
   };
 
-  const getUsers = async (): Promise<UsersResponse[]> => {
+  const getUsers = async (cursor: string | null,
+    direction: string): Promise<UserPaginate> => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Unauthorized");
       }
       const response = await axios.get(
         process.env.REACT_APP_GET_USERS || "",
         {
+          params: { cursor, direction },
           headers: {
             token: `${token}`,
           },
@@ -52,7 +53,7 @@ export function UserService() {
 
   const AddUsers = async (data: any): Promise<any> => {
     try {
-      const token = localStorage.getItem('token');
+
       if (!token) {
         throw new Error('Unauthorized');
       }
@@ -79,7 +80,6 @@ export function UserService() {
 
   const getUserById = async (id: string): Promise<UserDetail | null> => {
     try {
-      const token = localStorage.getItem('token');
       if (!token) {
         throw new Error('Unauthorized');
       }
@@ -100,7 +100,7 @@ export function UserService() {
 
   const updateUser = async (data: any) => {
     try {
-      const token = localStorage.getItem('token');
+      ;
       if (!token) {
         throw new Error('Unauthorized');
       }
@@ -123,7 +123,7 @@ export function UserService() {
 
   const deleteUsers = async (data: UserListDelete[]) => {
     try {
-      const token = localStorage.getItem('token');
+      ;
       if (!token) {
         throw new Error('Unauthorized');
       }
@@ -142,7 +142,6 @@ export function UserService() {
       throw err;
     }
   };
-
 
   const provinceVietNam = async (): Promise<ProvinceResponse[]> => {
     try {
