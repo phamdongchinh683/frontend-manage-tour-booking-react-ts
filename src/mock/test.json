@@ -14,8 +14,8 @@
  {
   "category": "bookingTour",
   "id": "3",
-  "name": "Booking List",
-  "linkRouter": "manage-booking-tour/booking-tour-list"
+  "name": "Book Tour List",
+  "linkRouter": "manage-book-tour/book-tour-list"
  },
  {
   "category": "blog",

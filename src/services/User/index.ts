@@ -37,7 +37,7 @@ export function UserService() {
         throw new Error("Unauthorized");
       }
       const response = await axios.get(
-        process.env.REACT_APP_GET_USERS || "",
+        process.env.REACT_APP_GET_USER_LIST || "",
         {
           params: { cursor, direction },
           headers: {
@@ -49,6 +49,31 @@ export function UserService() {
     } catch (err) {
       throw err;
     }
+  }
+
+  const userList = async () => {
+    try {
+      if (!token) {
+        throw new Error('Unauthorized');
+      }
+      const response: AxiosResponse<string> = await axios.get(
+        process.env.REACT_APP_GET_USERS || '',
+        {
+          headers: {
+            token: `${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.message) {
+        return (err.response.data.message);
+      } else if (err.message) {
+        return (err.message);
+      } else {
+        return 'An unknown error occurred.';
+      }
+    };
   }
 
   const AddUsers = async (data: any): Promise<any> => {
@@ -148,7 +173,7 @@ export function UserService() {
       const response: AxiosResponse = await axios.get(
         process.env.REACT_APP_GET_PROVINCES || "/provinces"
       );
-      return response.data.results;
+      return response.data;
     } catch (err) {
       console.error("Error fetching provinces:", err);
       throw err;
@@ -184,6 +209,7 @@ export function UserService() {
     adminLogin,
     getUsers,
     getUserById,
-    provinceVietNam
+    provinceVietNam,
+    userList
   };
 }

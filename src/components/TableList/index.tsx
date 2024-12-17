@@ -12,7 +12,7 @@ const TableList: React.FC<ITableList> = ({
   return (
     <>
       <Container>
-        <div className="header d-flex justify-content-between align-items-center">
+        <div className="header d-flex justify-content-between align-items-center p-3" >
           <h1>{title}</h1>
           <div className="d-flex gap-2">
             {create}

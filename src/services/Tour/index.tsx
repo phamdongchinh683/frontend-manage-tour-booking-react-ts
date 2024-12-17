@@ -3,6 +3,7 @@ import { ApiResponse } from "../../models/ApiResponse";
 import { CloudinaryResponse } from "../../models/CloudinaryResponse";
 import { TourDetail } from "../../models/TourDetail";
 import { TourListDelete } from "../../models/TourListDelete";
+import { TourListResponse } from "../../models/TourListResponse";
 import { TourPaginate } from "../../models/TourPaginate";
 import { TourUpdate } from "../../models/TourUpdate";
 
@@ -148,6 +149,26 @@ export function TourService() {
     }
   };
 
+  const tourList = async (): Promise<ApiResponse<TourListResponse> | any> => {
+    try {
+      if (!token) {
+        throw new Error("Unauthorized");
+      }
+      const response: AxiosResponse<string> = await axios.get(
+        process.env.REACT_APP_TOUR_ALL || "",
+        {
+          headers: {
+            token: `${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   return {
     getTours,
     AddTours,
@@ -155,5 +176,6 @@ export function TourService() {
     updateTour,
     uploadImage,
     getTourById,
+    tourList,
   };
 }

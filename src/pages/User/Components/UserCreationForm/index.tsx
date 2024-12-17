@@ -223,10 +223,10 @@ export const UserCreationForm: FC = () => {
                       <option value="">Select city...</option>
                       {provinces.map((province) => (
                         <option
-                          key={province.province_id}
-                          value={province.province_name}
+                          key={province.code}
+                          value={province.name}
                         >
-                          {province.province_name}
+                          {province.name}
                         </option>
                       ))}
                     </Form.Select>

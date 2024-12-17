@@ -7,6 +7,7 @@ import {
 import { Layout } from "../components/Layout";
 import useToken from "../jwt/useToken";
 import { Login } from "../pages/Auth/Login";
+
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import { RoleCreationForm } from "../pages/Role/Components/RoleCreationForm";
@@ -19,6 +20,11 @@ import { UserCreationForm } from "../pages/User/Components/UserCreationForm";
 import { UserDetailById } from "../pages/User/Components/UserDetail";
 import { UserList } from "../pages/User/Components/UserList";
 import { UserUpdateForm } from "../pages/User/Components/UserUpdateForm";
+import { BookTourList } from "../pages/Booking/Components/BookTourList";
+import { BookTourCreationForm } from "../pages/Booking/Components/BookTourCreationForm";
+import { BookTourDetailById } from "../pages/Booking/Components/BookTourDetail";
+import { BookTourUpdateForm } from "../pages/Booking/Components/BookTourUpdateForm";
+
 
 export const RouterApp: React.FC = () => {
   const { isAuthenticated } = useToken();
@@ -55,6 +61,7 @@ export const RouterApp: React.FC = () => {
               index: true,
               element: <Home />,
             },
+            //user
             {
               path: "manage-user/user",
               element: <UserList />,
@@ -71,6 +78,7 @@ export const RouterApp: React.FC = () => {
               path: "manage-user/detail-user/:id",
               element: <UserDetailById />,
             },
+            // tour
             {
               path: "manage-tour/tour",
               element: <TourList />,
@@ -87,6 +95,24 @@ export const RouterApp: React.FC = () => {
               path: "manage-tour/edit-tour/:id",
               element: <TourUpdateForm />,
             },
+            // book tour
+            {
+              path: "manage-book-tour/book-tour-list",
+              element: <BookTourList />,
+            },
+            {
+              path: "manage-book-tour/create-book-tour",
+              element: <BookTourCreationForm />,
+            },
+            {
+              path: "manage-book-tour/detail-book-tour/:id",
+              element: <BookTourDetailById />,
+            },
+            {
+              path: "manage-book-tour/edit-book-tour/:id",
+              element: <BookTourUpdateForm />,
+            },
+            // role
             {
               path: "manage-role/role",
               element: <RoleList />,
