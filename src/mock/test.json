@@ -18,24 +18,6 @@
   "linkRouter": "manage-book-tour/book-tour-list"
  },
  {
-  "category": "blog",
-  "id": "4",
-  "name": "Blog List",
-  "linkRouter": "manage-blog/blog-list"
- },
- {
-  "category": "comment",
-  "id": "5",
-  "name": "Comment List",
-  "linkRouter": "manage-comment/comment-list"
- },
- {
-  "category": "review",
-  "id": "6",
-  "name": "Review List",
-  "linkRouter": "manage-review/review-list"
- },
- {
   "category": "tour",
   "id": "7",
   "name": "Tour List",

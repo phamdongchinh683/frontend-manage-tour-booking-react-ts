@@ -118,9 +118,10 @@ export const UserList: FC = () => {
 
     try {
       await deleteUsers(selectedIds.map((id) => ({ _id: id })));
+      const updateList = list.filter((user) => !selectedIds.includes(user._id));
+      setList(updateList);
       alert("Selected users deleted successfully!");
     } catch (error) {
-      console.error("Failed to delete users:", error);
       alert("Unable to delete selected users. Please try again.");
     }
   };
@@ -183,6 +184,7 @@ export const UserList: FC = () => {
             style={{ height: "50vh" }}
           >
             <Spinner animation="border" variant="primary" />
+            <span>There are currently no users available</span>
           </div>
         ) : (
           <Table striped bordered hover>

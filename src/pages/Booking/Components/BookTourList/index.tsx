@@ -44,7 +44,7 @@ export const BookTourList: FC = () => {
     if (nextCursor) {
       fetchBooking(nextCursor, "next");
       navigate(
-        `/dashboard/manage-booking/booking-list?cursor=${nextCursor}&direction=next`
+        `/dashboard/manage-book-tour/book-tour-list?cursor=${nextCursor}&direction=next`
       );
     }
   };
@@ -53,7 +53,7 @@ export const BookTourList: FC = () => {
     if (prevCursor) {
       fetchBooking(prevCursor, "prev");
       navigate(
-        `/dashboard/manage-booking/booking-list?cursor=${prevCursor}&direction=prev`
+        `/dashboard/manage-book-tour/book-tour-list?cursor=${prevCursor}&direction=prev`
       );
     }
   };
@@ -91,15 +91,23 @@ export const BookTourList: FC = () => {
   };
 
   const deleteBookingById = async (bookingId: string) => {
+    const selectedIds = getSelectedBooking();
     if (!window.confirm("Are you sure you want to delete this booking?")) {
       return;
     }
 
     try {
       await deleteBookTours([{ _id: bookingId }]);
-      setList((prevList) =>
-        prevList.filter((booking) => booking._id !== bookingId)
+      const updatedList = list.filter(
+        (booking) => !selectedIds.includes(booking._id)
       );
+      setList(updatedList);
+      if (updatedList.length === 0 && prevCursor) {
+        fetchBooking(prevCursor, "prev");
+        navigate(
+          `/dashboard/manage-book-tour/book-tour-list?cursor=${prevCursor}&direction=prev`
+        );
+      }
     } catch (error) {
       console.error("Failed to delete the booking:", error);
     }
@@ -119,17 +127,26 @@ export const BookTourList: FC = () => {
     }
 
     try {
-      const ids = selectedIds.map((id) => ({ _id: id }));
+      const ids: any = selectedIds.map((id) => ({ _id: id }));
       await deleteBookTours(ids);
-      setList((prevList) =>
-        prevList.filter((booking) => !selectedIds.includes(booking._id))
+
+      const updatedList = list.filter(
+        (booking) => !selectedIds.includes(booking._id)
       );
+      setList(updatedList);
+
+      if (updatedList.length === 0 && prevCursor) {
+        fetchBooking(prevCursor, "prev");
+        navigate(
+          `/dashboard/manage-book-tour/book-tour-list?cursor=${prevCursor}&direction=prev`
+        );
+      }
     } catch (error) {
       console.error("Failed to delete selected Booking:", error);
     }
   };
 
-  const tableData = list.map((booking) => (
+  const tableData = list.map((booking: any) => (
     <tr key={booking._id} className="align-middle text-center">
       <td>
         <input
@@ -157,7 +174,9 @@ export const BookTourList: FC = () => {
           variant="info"
           className="me-2"
           onClick={() =>
-            navigate(`/dashboard/manage-book-tour/detail-book-tour/${booking._id}`)
+            navigate(
+              `/dashboard/manage-book-tour/detail-book-tour/${booking._id}`
+            )
           }
         >
           Detail
@@ -192,10 +211,12 @@ export const BookTourList: FC = () => {
       data={
         list.length === 0 ? (
           <div
-            className="d-flex justify-content-center align-items-center"
+            className="d-flex justify-content-center align-items-center gap-2"
             style={{ height: "50vh" }}
           >
             <Spinner animation="border" variant="primary" />
+
+            <span>There are currently no tour books available</span>
           </div>
         ) : (
           <Table striped bordered hover>

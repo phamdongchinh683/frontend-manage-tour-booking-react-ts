@@ -134,6 +134,7 @@ export const RoleList: FC = () => {
             style={{ height: "50vh" }}
           >
             <Spinner animation="border" variant="primary" />
+            <span>There are currently no roles available</span>
           </div>
         ) : (
           <Table striped bordered hover>

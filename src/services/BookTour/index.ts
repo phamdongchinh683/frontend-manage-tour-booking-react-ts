@@ -3,6 +3,7 @@ import { ApiResponse } from "../../models/ApiResponse";
 import { BookingDelete } from "../../models/BookingDelete";
 import { BookingDetail } from "../../models/BookingDetail";
 import { BookingPaginate } from "../../models/BookingPaginate";
+import { UpdateBookTour } from "../../models/UpdateBookTour";
 export function BookTourService() {
  const token = localStorage.getItem("token");
 
@@ -66,7 +67,6 @@ export function BookTourService() {
      },
     }
    );
-   console.log(response);
    return response.data.data;
   } catch (err) {
    console.error(err);
@@ -74,6 +74,27 @@ export function BookTourService() {
   }
  };
 
+ const updateBookTour = async (id: string, data: UpdateBookTour) => {
+  try {
+   if (!token) {
+    throw new Error("Unauthorized");
+   }
+
+   const response: AxiosResponse<any> = await axios.put(
+    process.env.REACT_APP_UPDATE_BOOKING+`/${id}` || "",
+    { bookTour: data },
+    {
+     headers: {
+      token: `${token}`,
+     },
+    }
+   );
+
+   return response.data.data;
+  } catch (err) {
+   throw err;
+  }
+ }
  const deleteBookTours = async (id: BookingDelete[]) => {
   try {
 
@@ -99,6 +120,7 @@ export function BookTourService() {
   getBookTours,
   getBookTourById,
   addBookTours,
-  deleteBookTours
+  deleteBookTours,
+  updateBookTour
  };
 }

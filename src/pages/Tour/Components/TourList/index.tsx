@@ -182,6 +182,7 @@ export const TourList: FC = () => {
             style={{ height: "50vh" }}
           >
             <Spinner animation="border" variant="primary" />
+            <span>There are currently no tours available</span>
           </div>
         ) : (
           <Table striped bordered hover>

@@ -56,6 +56,10 @@ export const BookTourCreationForm: FC = () => {
       }
     };
     fetchData();
+
+    const bookToured = localStorage.getItem("bookings");
+    const bookTours = bookToured ? JSON.parse(bookToured) : [];
+    setBookingList(bookTours);
   }, []);
   const handleChange = (e: ChangeEvent) => {
     const { name, value } = e.target as HTMLInputElement | HTMLSelectElement;
@@ -110,7 +114,7 @@ export const BookTourCreationForm: FC = () => {
       end_time: "",
       status: 0,
       card_number: "",
-      total_amount: 0,
+      total_amount: 20,
     });
     const saveBooking = localStorage.getItem("bookings");
     const booking = saveBooking ? JSON.parse(saveBooking) : [];
@@ -148,8 +152,6 @@ export const BookTourCreationForm: FC = () => {
       note: "completed",
     },
   ];
-
-  console.log(bookings);
 
   return (
     <Container>
@@ -333,7 +335,7 @@ export const BookTourCreationForm: FC = () => {
                       <th>Handler</th>
                     </tr>
                   </thead>
-                  <tbody >
+                  <tbody>
                     {bookings.map((bookTour: any, index: any) => (
                       <tr key={index}>
                         <td className="text-truncate-column">

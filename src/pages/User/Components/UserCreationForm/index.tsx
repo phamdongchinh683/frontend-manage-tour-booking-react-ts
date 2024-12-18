@@ -72,10 +72,8 @@ export const UserCreationForm: FC = () => {
   const deleteUser = (index: number) => {
     const savedUsers = localStorage.getItem("users");
     const users = savedUsers ? JSON.parse(savedUsers) : [];
-
     users.splice(index, 1);
     localStorage.setItem("users", JSON.stringify(users));
-
     setUserList(users);
   };
 
@@ -136,7 +134,6 @@ export const UserCreationForm: FC = () => {
     const savedUsers = localStorage.getItem("users");
     const users = savedUsers ? JSON.parse(savedUsers) : [];
     const result: any = await AddUsers({ users: users });
-
     if (result === "Exited") {
       alert("Some users already exist in the system. Please review the data.");
     } else if (users.length === 0) {
