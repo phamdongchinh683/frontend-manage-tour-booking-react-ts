@@ -332,7 +332,7 @@ export const BookTourCreationForm: FC = () => {
                       <th>Tour</th>
                       <th>Guide</th>
                       <th>User</th>
-                      <th>Handler</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>

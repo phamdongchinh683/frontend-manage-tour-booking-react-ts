@@ -171,7 +171,7 @@ export const RoleCreationForm: FC = () => {
                   <thead>
                     <tr>
                       <th>NameRole</th>
-                      <th>Handler</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>

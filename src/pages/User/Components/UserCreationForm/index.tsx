@@ -311,7 +311,7 @@ export const UserCreationForm: FC = () => {
                       <th>Password</th>
                       <th>PhoneNumber</th>
                       <th>Email</th>
-                      <th>Handler</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -60,8 +60,6 @@ export const TourCreationForm: FC = () => {
     setTourList(savedTours ? JSON.parse(savedTours) : []);
   }, []);
 
-  console.log(province);
-  console.log(guide)
   const deleteTourById = (index: number) => {
     const saveTours = localStorage.getItem("tours");
     const tours = saveTours ? JSON.parse(saveTours) : [];
@@ -207,10 +205,7 @@ export const TourCreationForm: FC = () => {
                   >
                     <option value="">Select City...</option>
                     {province.map((param) => (
-                      <option
-                        key={param.code}
-                        value={param.name}
-                      >
+                      <option key={param.code} value={param.name}>
                         {param.name}
                       </option>
                     ))}
@@ -305,6 +300,7 @@ export const TourCreationForm: FC = () => {
                     <th>Child Price</th>
                     <th>Guide</th>
                     <th>Images</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -1,23 +1,22 @@
 import axios, { AxiosResponse } from "axios";
 import { ApiResponse } from "../../models/ApiResponse";
-import { BookingDelete } from "../../models/BookingDelete";
-import { BookingDetail } from "../../models/BookingDetail";
-import { IBookingList } from "../../models/BookingList";
-import { BookingPaginate } from "../../models/BookingPaginate";
-import { UpdateBookTour } from "../../models/UpdateBookTour";
-export function BookTourService() {
+import { PaymentDelete } from "../../models/PaymentDelete";
+import { PaymentDetail } from "../../models/PaymentDetail";
+import { PaymentPaginate } from "../../models/PaymentPaginate";
+import { PaymentUpdate } from "../../models/PaymentUpdate";
+export function PaymentService() {
  const token = localStorage.getItem("token");
 
- const getBookTours = async (
+ const getPayments = async (
   cursor: string | null,
   direction: string
- ): Promise<ApiResponse<BookingPaginate> | any> => {
+ ): Promise<ApiResponse<PaymentPaginate> | any> => {
   try {
    if (!token) {
     throw new Error("Unauthorized");
    }
-   const response: AxiosResponse<ApiResponse<BookingPaginate>> =
-    await axios.get(process.env.REACT_APP_BOOKING_LIST || "", {
+   const response: AxiosResponse<ApiResponse<PaymentPaginate>> =
+    await axios.get(process.env.REACT_APP_PAYMENT_LIST || "", {
      params: { cursor, direction },
      headers: {
       token: `${token}`,
@@ -29,13 +28,13 @@ export function BookTourService() {
   }
  };
 
- const addBookTours = async (data: any): Promise<string> => {
+ const addPayments = async (data: any): Promise<string> => {
   try {
    if (!token) {
     throw new Error("Unauthorized");
    }
    const response: AxiosResponse<string> = await axios.post(
-    process.env.REACT_APP_CREATE_BOOKING || "",
+    process.env.REACT_APP_CREATE_PAYMENT || "",
     data,
     {
      headers: {
@@ -55,35 +54,35 @@ export function BookTourService() {
   }
  };
 
- const getBookTourById = async (id: string): Promise<ApiResponse<BookingDetail>> => {
+ const getPaymentById = async (id: string): Promise<ApiResponse<PaymentDetail>> => {
   try {
    if (!token) {
     throw new Error("Unauthorized");
    }
    const response = await axios.get(
-    process.env.REACT_APP_BOOKING_DETAIL + `${id}` || ``,
+    process.env.REACT_APP_PAYMENT_DETAIL + `${id}` || ``,
     {
      headers: {
       token: `${token}`,
      },
     }
    );
-   return response.data.data;
+   return response.data;
   } catch (err) {
    console.error(err);
    throw err;
   }
  };
 
- const updateBookTour = async (id: string, data: UpdateBookTour) => {
+ const updatePayment = async (id: string, data: PaymentUpdate) => {
   try {
    if (!token) {
     throw new Error("Unauthorized");
    }
 
    const response: AxiosResponse<any> = await axios.put(
-    process.env.REACT_APP_UPDATE_BOOKING + `/${id}` || "",
-    { bookTour: data },
+    process.env.REACT_APP_UPDATE_PAYMENT + `/${id}` || "",
+    { Payment: data },
     {
      headers: {
       token: `${token}`,
@@ -96,14 +95,14 @@ export function BookTourService() {
    throw err;
   }
  }
- const deleteBookTours = async (id: BookingDelete[]) => {
+ const deletePayments = async (id: PaymentDelete[]) => {
   try {
 
    if (!token) {
     throw new Error("Unauthorized. Please log in.");
    }
    const response: AxiosResponse<string> = await axios.delete(
-    process.env.REACT_APP_DELETE_BOOKING || "",
+    process.env.REACT_APP_DELETE_PAYMENT || "",
     {
      headers: {
       token: `${token}`,
@@ -117,33 +116,11 @@ export function BookTourService() {
    throw err;
   }
  }
-
- const bookTourList = async (): Promise<ApiResponse<any>> => {
-  try {
-
-   if (!token) {
-    throw new Error("Unauthorized. Please log in.");
-   }
-   const response: any = await axios.get(
-    process.env.REACT_APP_GET_BOOKING || "",
-    {
-     headers: {
-      token: `${token}`,
-     },
-    },
-
-   );
-   return response.data;
-  } catch (err) {
-   throw err;
-  }
- }
  return {
-  getBookTours,
-  getBookTourById,
-  addBookTours,
-  deleteBookTours,
-  updateBookTour,
-  bookTourList,
+  getPayments,
+  getPaymentById,
+  addPayments,
+  deletePayments,
+  updatePayment
  };
 }

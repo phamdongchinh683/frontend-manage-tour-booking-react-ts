@@ -8,6 +8,10 @@ import { Layout } from "../components/Layout";
 import useToken from "../jwt/useToken";
 import { Login } from "../pages/Auth/Login";
 
+import { BookTourCreationForm } from "../pages/Booking/Components/BookTourCreationForm";
+import { BookTourDetailById } from "../pages/Booking/Components/BookTourDetail";
+import { BookTourList } from "../pages/Booking/Components/BookTourList";
+import { BookTourUpdateForm } from "../pages/Booking/Components/BookTourUpdateForm";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import { RoleCreationForm } from "../pages/Role/Components/RoleCreationForm";
@@ -20,11 +24,10 @@ import { UserCreationForm } from "../pages/User/Components/UserCreationForm";
 import { UserDetailById } from "../pages/User/Components/UserDetail";
 import { UserList } from "../pages/User/Components/UserList";
 import { UserUpdateForm } from "../pages/User/Components/UserUpdateForm";
-import { BookTourList } from "../pages/Booking/Components/BookTourList";
-import { BookTourCreationForm } from "../pages/Booking/Components/BookTourCreationForm";
-import { BookTourDetailById } from "../pages/Booking/Components/BookTourDetail";
-import { BookTourUpdateForm } from "../pages/Booking/Components/BookTourUpdateForm";
-
+import { PaymentCreationForm } from "../pages/Payment/Components/PaymentCreationForm";
+import { PaymentList } from "../pages/Payment/Components/PaymentList";
+import { PaymentDetailById } from "../pages/Payment/Components/PaymentDetail";
+import { PaymentUpdateForm } from "../pages/Payment/Components/PaymentUpdateForm";
 
 export const RouterApp: React.FC = () => {
   const { isAuthenticated } = useToken();
@@ -111,6 +114,23 @@ export const RouterApp: React.FC = () => {
             {
               path: "manage-book-tour/edit-book-tour/:id",
               element: <BookTourUpdateForm />,
+            },
+            // payment
+            {
+              path: "manage-payment/payment-list",
+              element: <PaymentList />,
+            },
+            {
+              path: "manage-payment/create-payment",
+              element: <PaymentCreationForm />,
+            },
+            {
+              path: "manage-payment/detail-payment/:id",
+              element: <PaymentDetailById />,
+            },
+            {
+              path: "manage-payment/edit-payment/:id",
+              element: <PaymentUpdateForm />,
             },
             // role
             {
