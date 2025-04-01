@@ -138,8 +138,9 @@ export const PaymentList: FC = () => {
           onChange={(e) => handleCheckboxChange(e, payment._id)}
         />
       </td>
-      <td>{payment.booking_id}</td>
-      <td>{payment.user_id}</td>
+      <td>
+        {payment.user_id.fullName.firstName + payment.user_id.fullName.lastName}
+      </td>
       <td>{payment.status}</td>
       <td>{payment.card_number}</td>
       <td>{payment.total_amount}</td>
@@ -200,8 +201,7 @@ export const PaymentList: FC = () => {
                     onChange={handleSelectAllChange}
                   />
                 </th>
-                <th>Booking Id</th>
-                <th>User Id</th>
+                <th>user</th>
                 <th>status</th>
                 <th>card_number</th>
                 <th>total_amount</th>

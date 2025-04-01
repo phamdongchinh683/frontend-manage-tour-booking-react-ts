@@ -21,7 +21,6 @@ export const UserList: FC = () => {
   const fetchUsers = async (cursor: string | null, direction: string) => {
     try {
       const page: any = await getUsers(cursor, direction);
-      console.log(page);
       setList(page.users);
       setNextCursor(page.nextCursor);
       setPrevCursor(page.prevCursor);

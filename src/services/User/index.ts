@@ -8,7 +8,6 @@ import { LoginResponse } from "../../models/TokenResponse";
 import { UserDetail } from "../../models/UserDetail";
 import { UserListDelete } from "../../models/UserListDelete";
 export function UserService() {
-
   const token = localStorage.getItem("token");
 
   const adminLogin = async (loginData: AdminLogin): Promise<any> => {
@@ -21,17 +20,19 @@ export function UserService() {
       return response.data;
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.message) {
-        return (err.response.data.message);
+        return err.response.data.message;
       } else if (err.message) {
-        return (err.message);
+        return err.message;
       } else {
-        return 'An unknown error occurred.';
+        return "An unknown error occurred.";
       }
     }
   };
 
-  const getUsers = async (cursor: string | null,
-    direction: string): Promise<UserPaginate> => {
+  const getUsers = async (
+    cursor: string | null,
+    direction: string
+  ): Promise<UserPaginate> => {
     try {
       if (!token) {
         throw new Error("Unauthorized");
@@ -49,15 +50,15 @@ export function UserService() {
     } catch (err) {
       throw err;
     }
-  }
+  };
 
   const userList = async () => {
     try {
       if (!token) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
       const response: AxiosResponse<string> = await axios.get(
-        process.env.REACT_APP_GET_USERS || '',
+        process.env.REACT_APP_GET_USERS || "",
         {
           headers: {
             token: `${token}`,
@@ -67,23 +68,22 @@ export function UserService() {
       return response.data;
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.message) {
-        return (err.response.data.message);
+        return err.response.data.message;
       } else if (err.message) {
-        return (err.message);
+        return err.message;
       } else {
-        return 'An unknown error occurred.';
+        return "An unknown error occurred.";
       }
-    };
-  }
+    }
+  };
 
   const AddUsers = async (data: any): Promise<any> => {
     try {
-
       if (!token) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
       const response: AxiosResponse<string> = await axios.post(
-        process.env.REACT_APP_CREATE_USERS || '',
+        process.env.REACT_APP_CREATE_USERS || "",
         data,
         {
           headers: {
@@ -94,22 +94,22 @@ export function UserService() {
       return response.data;
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.message) {
-        return (err.response.data.message);
+        return err.response.data.message;
       } else if (err.message) {
-        return (err.message);
+        return err.message;
       } else {
-        return 'An unknown error occurred.';
+        return "An unknown error occurred.";
       }
-    };
-  }
+    }
+  };
 
   const getUserById = async (id: string): Promise<UserDetail | null> => {
     try {
       if (!token) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
       const response: AxiosResponse<ApiResponse<UserDetail>> = await axios.get(
-        process.env.REACT_APP_DETAIL_USER + `${id}` || '',
+        process.env.REACT_APP_DETAIL_USER + `${id}` || "",
         {
           headers: {
             token: `${token}`,
@@ -121,17 +121,16 @@ export function UserService() {
       console.error(err);
       throw err;
     }
-  }
+  };
 
   const updateUser = async (data: any) => {
     try {
-      ;
       if (!token) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
 
       const response: AxiosResponse<string> = await axios.put(
-        process.env.REACT_APP_UPDATE_USER || '',
+        process.env.REACT_APP_UPDATE_USER || "",
         { user: data },
         {
           headers: {
@@ -148,12 +147,11 @@ export function UserService() {
 
   const deleteUsers = async (data: UserListDelete[]) => {
     try {
-      ;
       if (!token) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
       const response: AxiosResponse<string> = await axios.delete(
-        process.env.REACT_APP_DELETE_USERS || '',
+        process.env.REACT_APP_DELETE_USERS || "",
         {
           headers: {
             token: `${token}`,
@@ -186,20 +184,16 @@ export function UserService() {
       if (!token) {
         throw new Error("Unauthorized");
       }
-      const response = await axios.get(
-        process.env.REACT_APP_GET_GUIDES || "",
-        {
-          headers: {
-            token: `${token}`,
-          },
-        }
-      );
+      const response = await axios.get(process.env.REACT_APP_GET_GUIDES || "", {
+        headers: {
+          token: `${token}`,
+        },
+      });
       return response.data.data;
     } catch (err) {
       throw err;
     }
-  }
-
+  };
 
   return {
     AddUsers,
@@ -210,6 +204,6 @@ export function UserService() {
     getUsers,
     getUserById,
     provinceVietNam,
-    userList
+    userList,
   };
 }
