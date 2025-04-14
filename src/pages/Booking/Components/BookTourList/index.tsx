@@ -147,54 +147,60 @@ export const BookTourList: FC = () => {
   };
 
   const tableData = list.map((booking: any) => (
-    <tr key={booking._id} className="align-middle text-center">
-      <td>
-        <input
-          type="checkbox"
-          checked={checkedBooking[booking._id] || false}
-          onChange={(e) => handleCheckboxChange(e, booking._id)}
-        />
-      </td>
-      <th>{booking.tour_id?.city}</th>
-      <th>
-        {booking.user_id?.fullName.firstName}
-        {booking.user_id?.fullName.lastName}
-      </th>
-      <th>
-        {booking.guide_id?.fullName.firstName}
-        {booking.guide_id?.fullName.lastName}
-      </th>
-      <th>{booking.number_visitors}</th>
-      <th>{booking.start_tour}</th>
-      <th>
-        Start: {booking.time.start_time} - End: {booking.time.end_time}
-      </th>
-      <td className="d-flex gap-1 justify-content-center align-items-center">
-        <Button
-          variant="info"
-          className="me-2"
-          onClick={() =>
-            navigate(
-              `/dashboard/manage-book-tour/detail-book-tour/${booking._id}`
-            )
-          }
-        >
-          Detail
-        </Button>
-        <ButtonPage
-          color="primary"
-          text="Edit"
-          fun={() => editBooking(booking._id)}
-        />
-        <ButtonPage
-          color="danger"
-          text="Delete"
-          fun={() => deleteBookingById(booking._id)}
-        />
-      </td>
-    </tr>
-  ));
-
+  <tr key={booking._id} className="align-middle text-center">
+    <td>
+      <input
+        type="checkbox"
+        checked={checkedBooking[booking._id] || false}
+        onChange={(e) => handleCheckboxChange(e, booking._id)}
+      />
+    </td>
+    <th>{booking.tour_id?.city}</th>
+    <th>
+      {booking.user_id?.fullName.firstName}
+      {booking.user_id?.fullName.lastName}
+    </th>
+    <th>
+      {booking.guide_id?.fullName.firstName}
+      {booking.guide_id?.fullName.lastName}
+    </th>
+    <th>{booking.number_visitors}</th>
+    <th>
+      {new Date(booking.start_tour).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })}
+    </th>
+    <th>
+      Start: {booking.time.start_time} - End: {booking.time.end_time}
+    </th>
+    <td className="d-flex gap-1 justify-content-center align-items-center">
+      <Button
+        variant="info"
+        className="me-2"
+        onClick={() =>
+          navigate(
+            `/dashboard/manage-book-tour/detail-book-tour/${booking._id}`
+          )
+        }
+      >
+        Detail
+      </Button>
+      <ButtonPage
+        color="primary"
+        text="Edit"
+        fun={() => editBooking(booking._id)}
+      />
+      <ButtonPage
+        color="danger"
+        text="Delete"
+        fun={() => deleteBookingById(booking._id)}
+      />
+    </td>
+  </tr>
+));
+  
   return (
     <TableList
       title="Book tours"
